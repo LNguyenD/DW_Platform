@@ -263,7 +263,7 @@ AS
 				from views.claim_portfolio_view cpr
 				where Reporting_Date <= '2015-11-30 23:59' and Date_Claim_Closed between '2015-11-01' and '2015-11-30 23:59'
 					and (exists (select [Claim_No] from views.claim_portfolio_view cpr_prior
-									where Reporting_Date <= '2015-10-31 23:59' and cpr_prior.Claim_No = cpr.Claim_No and cpr_prior.Claim_Closed_Flag = 'N')
+									where Reporting_Date <= DATEADD(DAY, -1, '2015-11-01') + '23:59' and cpr_prior.Claim_No = cpr.Claim_No and cpr_prior.Claim_Closed_Flag = 'N')
 										or ISNULL(cpr.Date_Claim_Entered, cpr.date_claim_received) >= '2015-11-01')
 				union all 
 				
@@ -276,7 +276,7 @@ AS
 				from views.claim_portfolio_view cpr
 				where Reporting_Date <= '2015-11-30 23:59' and Date_Claim_Reopened between '2015-11-01' and '2015-11-30 23:59'
 					and exists (select [Claim_No] from views.claim_portfolio_view cpr_prior
-									where Reporting_Date <= '2015-10-31 23:59' and cpr_prior.Claim_No = cpr.Claim_No and cpr_prior.Claim_Closed_Flag = 'Y')
+									where Reporting_Date <= DATEADD(DAY, -1, '2015-11-01') + '23:59' and cpr_prior.Claim_No = cpr.Claim_No and cpr_prior.Claim_Closed_Flag = 'Y')
 		) as tmp_claim_all
 		GROUP BY Agency_Name, [System], Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type
 GO
