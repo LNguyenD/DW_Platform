@@ -4,11 +4,9 @@ GO
 CREATE VIEW views.claim_portfolio_view
 AS
 	/* Get data from DART for testing */
-	SELECT TOP 100000
-		RTRIM(ISNULL(sub.AgencyName, 'Miscellaneous')) as Agency_Name
-		,'TMF' as [System]
-		,uv.* 
-	FROM [Dart].[dbo].[TMF_Portfolio] uv left join [Dart].[dbo].[TMF_Agencies_Sub_Category] sub on sub.POLICY_NO = uv.Policy_No
+	SELECT TOP 30000 *
+	FROM [Dart].[dbo].[uv_PORT]
+	WHERE [System] = 'TMF'
 		
 	--SELECT
 	--	'' [Reporting_Date],
