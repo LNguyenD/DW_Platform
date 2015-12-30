@@ -15,10 +15,6 @@
   </DataSets>
   <Reports>
     <ProjectItem>
-      <Name>Report1.rdl</Name>
-      <FullPath>Report1.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
       <Name>CPR_Summary.rdl</Name>
       <FullPath>CPR_Summary.rdl</FullPath>
     </ProjectItem>
