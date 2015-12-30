@@ -1,0 +1,2233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource1">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>42d84f88-8573-4b7a-ab11-dc6134e0efb7</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="ds_PORT">
+      <SharedDataSet>
+        <SharedDataSetReference>DataSet1</SharedDataSetReference>
+        <QueryParameters>
+          <QueryParameter Name="@Value">
+            <Value>=Parameters!Value.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Claim_Liability_Indicator">
+            <Value>=Parameters!Claim_Liability_Indicator.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Inactive_Claims">
+            <Value>=Parameters!Inactive_Claims.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Psychological_Claims">
+            <Value>=Parameters!Psychological_Claims.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Medically_Discharged">
+            <Value>=Parameters!Medically_Discharged.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Exempt_From_Reform">
+            <Value>=Parameters!Exempt_From_Reform.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@System">
+            <Value>=Parameters!System.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Reactivation">
+            <Value>=Parameters!Reactivation.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Start_Date">
+            <Value>=Parameters!Start_Date.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@End_Date">
+            <Value>=Parameters!End_Date.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+      </SharedDataSet>
+      <Fields>
+        <Field Name="Value">
+          <DataField>Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Type">
+          <DataField>Type</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="System">
+          <DataField>System</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Claim_Liability_Indicator_Group">
+          <DataField>Claim_Liability_Indicator_Group</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Is_Stress">
+          <DataField>Is_Stress</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Is_Inactive_Claims">
+          <DataField>Is_Inactive_Claims</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Is_Medically_Discharged">
+          <DataField>Is_Medically_Discharged</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Is_Exempt">
+          <DataField>Is_Exempt</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Is_Reactive">
+          <DataField>Is_Reactive</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Claim_Type">
+          <DataField>Claim_Type</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Sum">
+          <DataField>Sum</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Start_Date">
+          <DataField>Start_Date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="End_Date">
+          <DataField>End_Date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Tablix Name="Tablix148">
+            <TablixCorner>
+              <TablixCornerRows>
+                <TablixCornerRow>
+                  <TablixCornerCell>
+                    <CellContents>
+                      <Textbox Name="Textbox10">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>=switch(LCASE(RTRIM(Parameters!Value.Value)) = "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", Replace(UCASE(LEFT(Parameters!Type.Value,1)) + LCASE(RIGHT(Parameters!Type.Value,LEN(Parameters!Type.Value)-1)), "_", " ")
+		,LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all"
+			,switch(LCASE(RTRIM(Parameters!Type.Value)) = "agency","Subcategory"
+					,LCASE(RTRIM(Parameters!Type.Value)) = "portfolio","Employer size"
+					,LCASE(RTRIM(Parameters!Type.Value)) = "account_manager","Employer size"
+					,LCASE(RTRIM(Parameters!Type.Value)) = "division","States"
+					,LCASE(RTRIM(Parameters!Type.Value)) = "state","Divisions"
+					,LCASE(RTRIM(Parameters!Type.Value)) = "group","Team")
+		,LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all",switch(LCASE(RTRIM(Parameters!Type.Value)) = "group","Claim officer"))</Value>
+                                <Style>
+                                  <Color>#747474</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style>
+                              <TextAlign>Center</TextAlign>
+                            </Style>
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox10</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                      <ColSpan>2</ColSpan>
+                    </CellContents>
+                  </TablixCornerCell>
+                  <TablixCornerCell />
+                </TablixCornerRow>
+              </TablixCornerRows>
+            </TablixCorner>
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.2085cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.74237cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Rectangle Name="Rectangle15">
+                          <ReportItems>
+                            <Image Name="Image49">
+                              <Source>External</Source>
+                              <Value>=""</Value>
+                              <ActionInfo>
+                                <Actions>
+                                  <Action>
+                                    <Hyperlink>=iif(LCASE(Fields!Value.Value) = "health &amp; other" or 
+	 LCASE(Fields!Value.Value) = "police &amp; emergency services" or 
+	 LCASE(Fields!Value.Value) = "hotel" or 
+	 INSTR(LCASE(Fields!Value.Value), "_total") &gt; 0,"",
+		"javascript:void(" 
+		&amp; "/dart/dashboard/" &amp; Variables!Next_Level.Value 
+		&amp; "?reportpath=/emreporting/reports/CPR_Summary"
+		&amp; "&amp;System=" &amp; LCASE(Parameters!System.Value)
+		&amp; "&amp;Type=" &amp; LCASE(Parameters!Type.Value)
+		&amp; "&amp;Value=" &amp; switch(Variables!Level.Value = "level2", LCASE(Fields!Value.Value),
+							 Variables!Level.Value = "level3", LCASE(Parameters!Value.Value))
+		&amp; switch(Variables!Level.Value = "level2","",
+				 Variables!Level.Value = "level3","&amp;SubValue=" &amp; LCASE(Fields!Value.Value)) )</Hyperlink>
+                                  </Action>
+                                </Actions>
+                              </ActionInfo>
+                              <Top>0.0172in</Top>
+                              <Left>0.46285in</Left>
+                              <Height>0.27507in</Height>
+                              <Width>0.26799in</Width>
+                              <ToolTip>="[" 
+ &amp; "CPR_"</ToolTip>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Image>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
+                          <ToolTip>="[image_header_tablix]"</ToolTip>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Rectangle>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1325">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1325</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Gainsboro</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Gainsboro</Color>
+                            </RightBorder>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox357">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox357</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Gainsboro</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Gainsboro</Color>
+                            </RightBorder>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum8">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum9">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6", "Transparent")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum10">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox361">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox361</rd:DefaultName>
+                          <ToolTip>="therapy_treat"</ToolTip>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Gainsboro</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Gainsboro</Color>
+                            </RightBorder>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox363">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox363</rd:DefaultName>
+                          <ToolTip>="lump_sum_int"</ToolTip>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Gainsboro</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Gainsboro</Color>
+                            </RightBorder>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum14">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum15">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value  
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox367">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox367</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Gainsboro</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Gainsboro</Color>
+                            </RightBorder>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Sum16">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Style>
+                                    <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Sum</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Hyperlink>="javascript:openPortfolioRawDataPopup('reportname=CPR_Raw_Data&amp;Value=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", iif(LCASE(RTRIM(Fields!Value.Value)) = "tmf_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wow_total" Or LCASE(RTRIM(Fields!Value.Value)) = "wcnsw_total" Or LCASE(RTRIM(Fields!Value.Value)) = "hospitality_total", "all", RTRIM(REPLACE(Fields!Value.Value, " &amp; ", "@@@"))), LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all", LCASE(Parameters!Value.Value)) + "&amp;Type=" + Parameters!Type.Value + "&amp;SubValue=" + switch(LCASE(RTRIM(Parameters!Value.Value)) = "all", "all", LCASE(RTRIM(Parameters!Value.Value)) &lt;&gt; "all" And LCASE(RTRIM(Parameters!SubValue.Value)) = "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!Value.Value) &amp; "_total", "all", LCASE(Fields!Value.Value)), LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", LCASE(Parameters!SubValue.Value)) + "&amp;SubSubValue=" + switch(LCASE(RTRIM(Parameters!SubValue.Value)) = "all", "all", LCASE(RTRIM(Parameters!SubValue.Value)) &lt;&gt; "all", iif(LCASE(Fields!Value.Value) = LCASE(Parameters!SubValue.Value) &amp; "_total", "all", LCASE(Fields!Value.Value))) + "&amp;System=" + Parameters!System.Value 
++ "&amp;Claim_Liability_Indicator=" + Parameters!Claim_Liability_Indicator.Value 
++ "&amp;Psychological_Claims=" + Parameters!Psychological_Claims.Value 
++ "&amp;Inactive_Claims=" + Parameters!Inactive_Claims.Value 
++ "&amp;Medically_Discharged=" + Parameters!Medically_Discharged.Value 
++ "&amp;Exempt_From_Reform=" + Parameters!Exempt_From_Reform.Value 
++ "&amp;Premium_Impacting=" + Parameters!Premium_Impacting.Value 
++ "&amp;Reactivation=" + Parameters!Reactivation.Value 
++ "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
++ "&amp;Start_Date=" + format(Parameters!Start_Date.Value,"dd/MM/yyyy") + "&amp;End_Date=" + format(Parameters!End_Date.Value,"dd/MM/yyyy") + " 23:59" + "&amp;ClaimType=" + Fields!Claim_Type.Value &amp; "_overall')"</Hyperlink>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6","Transparent")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Value">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Value.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>1.49958cm</Size>
+                        <CellContents>
+                          <Textbox Name="Value">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>=Fields!Value.Value</Value>
+                                    <Style>
+                                      <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
+                                      <Color>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Black", "#747474")</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style>
+                                  <TextAlign>Center</TextAlign>
+                                </Style>
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Value</rd:DefaultName>
+                            <ActionInfo>
+                              <Actions>
+                                <Action>
+                                  <Hyperlink>="javascript:openCPRDetail('reportpath=/emreporting/reports/CPR_Detail"
+	&amp; "&amp;System=" &amp; Parameters!System.Value 
+	&amp; "&amp;Type=" &amp; Parameters!Type.Value 
+	&amp; "&amp;Value=" &amp; switch(LCASE(Variables!Level.Value) = "level2", REPLACE(LCASE(Fields!Value.Value)," &amp; ","@@@"),
+							LCASE(Variables!Level.Value) = "level3" or LCASE(Variables!Level.Value) = "level4", LCASE(Parameters!Value.Value))
+	&amp; "&amp;SubValue=" &amp; switch(LCASE(Variables!Level.Value) = "level2", "all",
+							LCASE(Variables!Level.Value) = "level3", LCASE(Fields!Value.Value),
+							LCASE(Variables!Level.Value) = "level4", LCASE(Parameters!SubValue.Value))
+	&amp; "&amp;SubSubValue=" &amp; switch(LCASE(Variables!Level.Value) = "level2" or LCASE(Variables!Level.Value) = "level3", "all",
+							LCASE(Variables!Level.Value) = "level4", LCASE(Fields!Value.Value))
+	&amp; "&amp;Start_Date=" &amp; format(Parameters!Start_Date.Value,"dd/MM/yyyy")
+	&amp; "&amp;End_Date=" &amp; format(Parameters!End_Date.Value,"dd/MM/yyyy hh:mm tt")
+	&amp; "&amp;Claim_Liability_Indicator=" &amp; Parameters!Claim_Liability_Indicator.Value
+	&amp; "&amp;Psychological_Claims=" &amp; Parameters!Psychological_Claims.Value
+	&amp; "&amp;Inactive_Claims=" &amp; Parameters!Inactive_Claims.Value
+	&amp; "&amp;Medically_Discharged=" &amp; Parameters!Medically_Discharged.Value
+	&amp; "&amp;Exempt_From_Reform=" &amp; Parameters!Exempt_From_Reform.Value
+	&amp; "&amp;Premium_Impacting=" &amp; Parameters!Premium_Impacting.Value
+	&amp; "&amp;Reactivation=" &amp; Parameters!Reactivation.Value
+	&amp; "&amp;View_Type=" + iif(Parameters!View_Type.Value = "","advance",Parameters!View_Type.Value)
+	&amp; "&amp;Level=" &amp; Variables!Level.Value
+	&amp; "')"</Hyperlink>
+                                </Action>
+                              </Actions>
+                            </ActionInfo>
+                            <ToolTip>="TotalDetailedPortfolio" + LCASE(RTRIM(Fields!Value.Value))</ToolTip>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                      <TablixMembers>
+                        <TablixMember />
+                      </TablixMembers>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Metric_light">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_all","X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!Value.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Textbox12">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>Go to next level</Value>
+                                    <Style>
+                                      <Color>#747474</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style>
+                                  <TextAlign>Center</TextAlign>
+                                </Style>
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Textbox12</rd:DefaultName>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                  <Visibility>
+                    <Hidden>=iif(Variables!Is_Last_Level.Value = true,true,false)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>7.4595cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox213">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>New claims</Value>
+                                <Style>
+                                  <FontSize>11pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox213</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>Gainsboro</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="New_claims">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_new_all" 
+	OR Fields!Claim_Type.Value = "claim_new_lt"
+	OR Fields!Claim_Type.Value = "claim_new_nlt", "X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixHeader>
+                    <Size>7.4595cm</Size>
+                    <CellContents>
+                      <Textbox Name="Claim_Type">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>=switch(Fields!Claim_Type.Value = "claim_new_all", "All new claims",
+		Fields!Claim_Type.Value = "claim_new_lt", "Time lost claims",
+		Fields!Claim_Type.Value = "claim_new_nlt", "Non time lost claims")</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Claim_Type</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>7.4595cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox123">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Open claims</Value>
+                                <Style>
+                                  <FontSize>11pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox123</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>Gainsboro</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Open_claims_all">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_all","X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Claim_Type5">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>All open claims</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                      <Color>#037baf</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Claim_Type5</rd:DefaultName>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>3.2735cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox216">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>=iif(LCASE(Parameters!System.Value) = "wow", "Age of claim", "RTW")</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox216</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6", "Transparent")</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember>
+                      <Group Name="Open_claims">
+                        <GroupExpressions>
+                          <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                        </GroupExpressions>
+                        <Filters>
+                          <Filter>
+                            <FilterExpression>=iif((LCASE(Parameters!System.Value) &lt;&gt; "wow" and (Fields!Claim_Type.Value = "claim_open_0_13"
+												OR Fields!Claim_Type.Value = "claim_open_0_78"
+												OR Fields!Claim_Type.Value = "claim_open_13_26"
+												OR Fields!Claim_Type.Value = "claim_open_26_52"
+												OR Fields!Claim_Type.Value = "claim_open_52_78"
+												OR Fields!Claim_Type.Value = "claim_open_78_130"
+												OR Fields!Claim_Type.Value = "claim_open_gt_130"))
+	  OR
+	  (LCASE(Parameters!System.Value) = "wow" and (Fields!Claim_Type.Value = "claim_open_lt_05"
+												OR Fields!Claim_Type.Value = "claim_open_lt_013"
+												OR Fields!Claim_Type.Value = "claim_open_lt_26"
+												OR Fields!Claim_Type.Value = "claim_open_lt_52"
+												OR Fields!Claim_Type.Value = "claim_open_lt_78"
+												OR Fields!Claim_Type.Value = "claim_open_lt_104"
+												OR Fields!Claim_Type.Value = "claim_open_lt_130"
+												OR Fields!Claim_Type.Value = "claim_open_ge_130"))
+	,"X","Z")</FilterExpression>
+                            <Operator>Equal</Operator>
+                            <FilterValues>
+                              <FilterValue>="X"</FilterValue>
+                            </FilterValues>
+                          </Filter>
+                        </Filters>
+                      </Group>
+                      <TablixMembers>
+                        <TablixMember>
+                          <TablixHeader>
+                            <Size>4.186cm</Size>
+                            <CellContents>
+                              <Textbox Name="Claim_Type2">
+                                <CanGrow>true</CanGrow>
+                                <KeepTogether>true</KeepTogether>
+                                <Paragraphs>
+                                  <Paragraph>
+                                    <TextRuns>
+                                      <TextRun>
+                                        <Value>=switch(Fields!Claim_Type.Value = "claim_open_0_13","0 - 13 weeks",
+		Fields!Claim_Type.Value = "claim_open_13_26","13 - 26 weeks",
+		Fields!Claim_Type.Value = "claim_open_26_52","26 - 52 weeks",
+		Fields!Claim_Type.Value = "claim_open_52_78","52 - 78 weeks",
+		Fields!Claim_Type.Value = "claim_open_0_78","SubTotal 0-78",
+		Fields!Claim_Type.Value = "claim_open_78_130","78 - 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_gt_130","&gt; 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_05","&lt; 5 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_013","&lt; 13 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_26","&lt; 26 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_52","&lt; 52 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_78","&lt; 78 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_104","&lt; 104 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_130","&lt; 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_ge_130","&gt;= 130 weeks")</Value>
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                          <Color>#037baf</Color>
+                                        </Style>
+                                      </TextRun>
+                                    </TextRuns>
+                                    <Style />
+                                  </Paragraph>
+                                </Paragraphs>
+                                <rd:DefaultName>Claim_Type2</rd:DefaultName>
+                                <Style>
+                                  <Border>
+                                    <Color>LightGrey</Color>
+                                    <Style>Solid</Style>
+                                  </Border>
+                                  <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6", "Transparent")</BackgroundColor>
+                                  <VerticalAlign>Middle</VerticalAlign>
+                                  <PaddingLeft>2pt</PaddingLeft>
+                                  <PaddingRight>2pt</PaddingRight>
+                                  <PaddingTop>2pt</PaddingTop>
+                                  <PaddingBottom>2pt</PaddingBottom>
+                                </Style>
+                              </Textbox>
+                            </CellContents>
+                          </TablixHeader>
+                        </TablixMember>
+                      </TablixMembers>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Open_claim_nlt_ncmm">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_nlt"
+	or (Fields!Claim_Type.Value = "claim_open_ncmm_next_week" and LCASE(Parameters!System.Value) &lt;&gt; "wow")
+	or (Fields!Claim_Type.Value = "claim_open_ncmm_this_week" and LCASE(Parameters!System.Value) &lt;&gt; "wow")
+	,"X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Claim_Type4">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>=switch(Fields!Claim_Type.Value = "claim_open_ncmm_this_week","NCMM actions for this week",
+		Fields!Claim_Type.Value = "claim_open_ncmm_next_week","NCMM actions for next week",
+		Fields!Claim_Type.Value = "claim_open_nlt","Non time lost claims")</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                      <Color>#037baf</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Claim_Type4</rd:DefaultName>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>7.4595cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox136">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Therapy treatment</Value>
+                                <Style>
+                                  <FontSize>11pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox136</rd:DefaultName>
+                        <ToolTip>="therapy_treat"</ToolTip>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>Gainsboro</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Therapy_treatment">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_acupuncture"
+	or Fields!Claim_Type.Value = "claim_open_chiro"
+	or Fields!Claim_Type.Value = "claim_open_massage"
+	or Fields!Claim_Type.Value = "claim_open_osteo"
+	or Fields!Claim_Type.Value = "claim_open_physio"
+	or Fields!Claim_Type.Value = "claim_open_rehab"
+	,"X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Claim_Type6">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>=switch(Fields!Claim_Type.Value = "claim_open_acupuncture","Acupuncture",
+		Fields!Claim_Type.Value = "claim_open_chiro","Chiro &gt; $1.000",
+		Fields!Claim_Type.Value = "claim_open_massage","Massage",
+		Fields!Claim_Type.Value = "claim_open_osteo","Osteopathy",
+		Fields!Claim_Type.Value = "claim_open_physio","Physio &gt; $2.000",
+		Fields!Claim_Type.Value = "claim_open_rehab","Rehab")</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                      <Color>#037baf</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Claim_Type6</rd:DefaultName>
+                            <ToolTip>="therapy_treat_sub"</ToolTip>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>7.4595cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox142">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Lump sum intimations</Value>
+                                <Style>
+                                  <FontSize>11pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox142</rd:DefaultName>
+                        <ToolTip>="lump_sum_int"</ToolTip>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>Gainsboro</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Lump_sum_intimations_death_idc_pp_recovery">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_death"
+	or Fields!Claim_Type.Value = "claim_open_industrial_deafness"
+	or Fields!Claim_Type.Value = "claim_open_ppd"
+	or Fields!Claim_Type.Value = "claim_open_recovery"
+	,"X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Claim_Type3">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>=switch(Fields!Claim_Type.Value = "claim_open_death","Death claims",
+		Fields!Claim_Type.Value = "claim_open_industrial_deafness","Industrial deafness claims",
+		Fields!Claim_Type.Value = "claim_open_ppd","Permanent partial disablement claims",
+		Fields!Claim_Type.Value = "claim_open_recovery","Recoveries claims")</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                      <Color>#037baf</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Claim_Type3</rd:DefaultName>
+                            <ToolTip>="lump_sum_int_sub"</ToolTip>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>3.2735cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox289">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Whole</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>person</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>impairment</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>(WPI)</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox289</rd:DefaultName>
+                        <ToolTip>="lump_sum_int_sub"</ToolTip>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember>
+                      <Group Name="Lump_sum_intimations_WPI">
+                        <GroupExpressions>
+                          <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                        </GroupExpressions>
+                        <Filters>
+                          <Filter>
+                            <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_wpi_all"
+	or Fields!Claim_Type.Value = "claim_open_wpi_0_10"
+	or Fields!Claim_Type.Value = "claim_open_wpi_11_14"
+	or Fields!Claim_Type.Value = "claim_open_wpi_15_20"
+	or Fields!Claim_Type.Value = "claim_open_wpi_21_30"
+	or Fields!Claim_Type.Value = "claim_open_wpi_31_more"
+	,"X","Z")</FilterExpression>
+                            <Operator>Equal</Operator>
+                            <FilterValues>
+                              <FilterValue>="X"</FilterValue>
+                            </FilterValues>
+                          </Filter>
+                        </Filters>
+                      </Group>
+                      <TablixMembers>
+                        <TablixMember>
+                          <TablixHeader>
+                            <Size>4.186cm</Size>
+                            <CellContents>
+                              <Textbox Name="Claim_Type7">
+                                <CanGrow>true</CanGrow>
+                                <KeepTogether>true</KeepTogether>
+                                <Paragraphs>
+                                  <Paragraph>
+                                    <TextRuns>
+                                      <TextRun>
+                                        <Value>=switch(Fields!Claim_Type.Value = "claim_open_wpi_all","All",
+		Fields!Claim_Type.Value = "claim_open_wpi_0_10","0 - 10%",
+		Fields!Claim_Type.Value = "claim_open_wpi_11_14","11 - 14%",
+		Fields!Claim_Type.Value = "claim_open_wpi_15_20","15 - 20%",
+		Fields!Claim_Type.Value = "claim_open_wpi_21_30","21 - 30%",
+		Fields!Claim_Type.Value = "claim_open_wpi_31_more","&gt;= 31%")</Value>
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                          <Color>#037baf</Color>
+                                        </Style>
+                                      </TextRun>
+                                    </TextRuns>
+                                    <Style />
+                                  </Paragraph>
+                                </Paragraphs>
+                                <rd:DefaultName>Claim_Type7</rd:DefaultName>
+                                <ToolTip>="lump_sum_int_sub"</ToolTip>
+                                <Style>
+                                  <Border>
+                                    <Color>LightGrey</Color>
+                                    <Style>Solid</Style>
+                                  </Border>
+                                  <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6")</BackgroundColor>
+                                  <VerticalAlign>Middle</VerticalAlign>
+                                  <PaddingLeft>2pt</PaddingLeft>
+                                  <PaddingRight>2pt</PaddingRight>
+                                  <PaddingTop>2pt</PaddingTop>
+                                  <PaddingBottom>2pt</PaddingBottom>
+                                </Style>
+                              </Textbox>
+                            </CellContents>
+                          </TablixHeader>
+                        </TablixMember>
+                      </TablixMembers>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Lump_sum_intimations_WID">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_open_wid","X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Claim_Type8">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>Common law</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                      <Color>#037baf</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Claim_Type8</rd:DefaultName>
+                            <ToolTip>="lump_sum_int_sub"</ToolTip>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>7.4595cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox144">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Claim closures</Value>
+                                <Style>
+                                  <FontSize>11pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <Color>#037baf</Color>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox144</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>Gainsboro</BackgroundColor>
+                          <VerticalAlign>Middle</VerticalAlign>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Claim_closures">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!Claim_Type.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=iif(Fields!Claim_Type.Value = "claim_closure"
+	or Fields!Claim_Type.Value = "claim_re_open"
+	or Fields!Claim_Type.Value = "claim_still_open"
+	,"X","Z")</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue>="X"</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>7.4595cm</Size>
+                        <CellContents>
+                          <Textbox Name="Claim_Type1">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>=switch(Fields!Claim_Type.Value = "claim_closure","Claim closures",
+		Fields!Claim_Type.Value = "claim_re_open","Reopened claims",
+		Fields!Claim_Type.Value = "claim_still_open","Reopened claims: Still open")</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                      <Color>#037baf</Color>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Claim_Type1</rd:DefaultName>
+                            <Style>
+                              <Border>
+                                <Color>LightGrey</Color>
+                                <Style>Solid</Style>
+                              </Border>
+                              <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6","Transparent")</BackgroundColor>
+                              <VerticalAlign>Middle</VerticalAlign>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>ds_PORT</DataSetName>
+            <Height>10.64195cm</Height>
+            <Width>10.668cm</Width>
+            <ToolTip>="portfolio_" &amp; SWITCH(LCASE(Parameters!View_Type.Value) = "last_two_weeks","week",
+					   LCASE(Parameters!View_Type.Value) = "last_month","month",
+					   LCASE(Parameters!View_Type.Value) = "","advance")
+	&amp; "_"
+	&amp; switch(LCASE(Parameters!Type.Value) = "agency" or LCASE(Parameters!Type.Value) = "portfolio" or LCASE(Parameters!Type.Value) = "employer_size","agency",
+						LCASE(Parameters!Type.Value) = "group","group",
+						LCASE(Parameters!Type.Value) = "account_manager","accountmanager")</ToolTip>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Tablix>
+        </ReportItems>
+        <Height>10.64195cm</Height>
+        <Style>
+          <BackgroundColor>White</BackgroundColor>
+        </Style>
+      </Body>
+      <Width>4.2in</Width>
+      <Page>
+        <PageHeight>100cm</PageHeight>
+        <PageWidth>21cm</PageWidth>
+        <LeftMargin>0cm</LeftMargin>
+        <RightMargin>0cm</RightMargin>
+        <TopMargin>0cm</TopMargin>
+        <BottomMargin>0cm</BottomMargin>
+        <ColumnSpacing>0.13cm</ColumnSpacing>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="Value">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Value</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="System">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>tmf</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>System</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Start_Date">
+      <DataType>DateTime</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>=CDATE(DATEADD("d",-15,Today) + " 00:00")</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Start_Date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="End_Date">
+      <DataType>DateTime</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>=CDATE(dateadd("d",-1,Today) + " 23:59")</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>End_Date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Claim_Liability_Indicator">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Claim_Liability_Indicator</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Psychological_Claims">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Psychological_Claims</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Inactive_Claims">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Inactive_Claims</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Medically_Discharged">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Medically_Discharged</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Exempt_From_Reform">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Exempt_From_Reform</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Premium_Impacting">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Premium_Impacting</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Reactivation">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Reactivation</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Type">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>group</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Type</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SubValue">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>all</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>SubValue</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="View_Type">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>=""</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>View_Type</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Variables>
+    <Variable Name="Next_Level">
+      <Value>=switch(LCASE(Variables!Level.Value) = "level2", "level3",
+		LCASE(Variables!Level.Value) = "level3", "level4"
+		)</Value>
+    </Variable>
+    <Variable Name="Level">
+      <Value>=iif(Parameters!Value.Value = "all", "level2",
+	iif(Parameters!SubValue.Value = "all","level3","level4"))</Value>
+    </Variable>
+    <Variable Name="Is_Last_Level">
+      <Value>=iif((Variables!Level.Value = "level3" AND (LCASE(Parameters!Type.Value) &lt;&gt; "group")					
+	 OR (Variables!Level.Value = "level2" AND LCASE(Parameters!Type.Value) = "employer_size")
+	 OR (Variables!Level.Value = "level2" AND LCASE(Parameters!Type.Value) = "broker")
+	 OR (Variables!Level.Value = "level4")
+		)
+	,true
+	,false)</Value>
+    </Variable>
+  </Variables>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>ea7e221e-9e3f-498f-9ef6-5eb32040461c</rd:ReportID>
+</Report>

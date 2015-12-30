@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Demo_DW_Platform", "Demo_DW_Platform\Demo_DW_Platform.rptproj", "{1269120A-A25B-4620-A0C2-74F7907D304B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		DebugLocal|Default = DebugLocal|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.Debug|Default.ActiveCfg = Debug
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.Debug|Default.Build.0 = DebugLocal
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.Debug|Default.Deploy.0 = DebugLocal
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.DebugLocal|Default.ActiveCfg = DebugLocal
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.DebugLocal|Default.Build.0 = DebugLocal
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.Release|Default.ActiveCfg = Release
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.Release|Default.Build.0 = Release
+		{1269120A-A25B-4620-A0C2-74F7907D304B}.Release|Default.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

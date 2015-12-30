@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>DataSource1</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@Value">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Claim_Liability_Indicator">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Inactive_Claims">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Psychological_Claims">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Medically_Discharged">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Exempt_From_Reform">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@System">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Reactivation">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Start_Date">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@End_Date">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText>SELECT Value, Type, System, Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type, Sum, Start_Date, 
+                  End_Date
+FROM     views.claim_portfolio_summary_view
+WHERE  (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+                  (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
+                  (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
+                  (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
+                  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
+                  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
+                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END)
+AND (Start_Date = @Start_Date) AND (End_Date = @End_Date)
+OPTION (maxrecursion 1100)</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="Value">
+        <DataField>Value</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Type">
+        <DataField>Type</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="System">
+        <DataField>System</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Claim_Liability_Indicator_Group">
+        <DataField>Claim_Liability_Indicator_Group</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Is_Stress">
+        <DataField>Is_Stress</DataField>
+        <rd:TypeName>System.Boolean</rd:TypeName>
+      </Field>
+      <Field Name="Is_Inactive_Claims">
+        <DataField>Is_Inactive_Claims</DataField>
+        <rd:TypeName>System.Boolean</rd:TypeName>
+      </Field>
+      <Field Name="Is_Medically_Discharged">
+        <DataField>Is_Medically_Discharged</DataField>
+        <rd:TypeName>System.Boolean</rd:TypeName>
+      </Field>
+      <Field Name="Is_Exempt">
+        <DataField>Is_Exempt</DataField>
+        <rd:TypeName>System.Boolean</rd:TypeName>
+      </Field>
+      <Field Name="Is_Reactive">
+        <DataField>Is_Reactive</DataField>
+        <rd:TypeName>System.Boolean</rd:TypeName>
+      </Field>
+      <Field Name="Claim_Type">
+        <DataField>Claim_Type</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Sum">
+        <DataField>Sum</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="Start_Date">
+        <DataField>Start_Date</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="End_Date">
+        <DataField>End_Date</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
