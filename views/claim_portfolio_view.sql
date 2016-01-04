@@ -4,9 +4,25 @@ GO
 CREATE VIEW views.claim_portfolio_view
 AS
 	/* Get data from DART for testing */
-	SELECT TOP 30000 *
+	
+	/* TMF */
+	SELECT TOP 10000 *
 	FROM [Dart].[dbo].[uv_PORT]
 	WHERE [System] = 'TMF'
+	
+	UNION ALL
+	
+	/* EML */
+	SELECT TOP 10000 *
+	FROM [Dart].[dbo].[uv_PORT]
+	WHERE [System] = 'EML'
+	
+	UNION ALL
+	
+	/* HEM */
+	SELECT TOP 10000 *
+	FROM [Dart].[dbo].[uv_PORT]
+	WHERE [System] = 'HEM'
 		
 	--SELECT
 	--	'' [Reporting_Date],
@@ -22,7 +38,7 @@ AS
 	--	'' [Broker_Name],
 	--	'' [Grouping],
 	--	cdr.claim_number [Claim_No],
-	--	cd.policy_number [Policy_No],
+	--	'' [Policy_No],
 	--	'' [WIC_Code],
 	--	'' [Company_Name],
 	--	wd.given_names + ', ' + wd.surname [Worker_Name],
@@ -34,7 +50,7 @@ AS
 	--	'' [Notification_Lag],
 	--	'' [Entered_Lag],
 	--	sd.liability_status_code_description [Claim_Liability_Indicator_Group],
-	--	cd.is_time_lost [Is_Time_Lost],
+	--	'' [Is_Time_Lost],
 	--	sd.claim_closed_flag [Claim_Closed_Flag],
 	--	cd.date_claim_entered [Date_Claim_Entered],
 	--	'' [Date_Claim_Closed],
@@ -58,7 +74,7 @@ AS
 	--	'' [Is_Medically_Discharged],
 	--	'' [Is_Exempt],
 	--	'' [Is_Reactive],
-	--	cd.is_medical_only [Is_Medical_Only],
+	--	'' [Is_Medical_Only],
 	--	'' [Is_D_D],
 	--	'' [HoursPerWeek],
 	--	'' [Is_Industrial_Deafness],
