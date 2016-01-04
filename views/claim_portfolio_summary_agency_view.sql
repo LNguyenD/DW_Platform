@@ -13,7 +13,11 @@ AS
 		WHERE [Date] > DATEADD(yy, -3, DATEADD(d, -1, CONVERT(datetime, CONVERT(char, GETDATE(), 106))))
 	)
 	
-	SELECT	Value, SubValue, SubSubValue = '', [Type] = 'agency', [Start_Date], [End_Date], [System], Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type,
+	SELECT	CAST([Value] AS VARCHAR(256)) AS [Value],
+			CAST([SubValue] AS VARCHAR(256)) AS [SubValue],
+			CAST('' AS VARCHAR(256)) COLLATE Latin1_General_CI_AS AS [SubSubValue],
+			CAST('agency' AS VARCHAR(20)) AS [Type], [Start_Date], [End_Date], [System],
+			Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type,
 			[Sum] = COUNT(distinct Claim_No)
 	FROM	(
 				/* AGENCY -> SUB_CATEGORY */
