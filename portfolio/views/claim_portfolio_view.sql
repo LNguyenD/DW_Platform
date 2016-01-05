@@ -27,20 +27,25 @@ AS
 	/* Get data from data warehouse: IN PROGRESS */
 		
 	SELECT
-		'' [Reporting_Date],
+		caf.activity_date_key [Reporting_Date],
 		cdr.source_system_code [System],
-		RTRIM(ISNULL('','Miscellaneous')) [Agency_Name],
-		'' [Sub_Category],
-		'' [Group],
-		'' [Team],
-		'' [Claims_Officer_Name],
+		RTRIM(COALESCE(asm.agency_name,'Miscellaneous')) [Agency_Name],
+		RTRIM(COALESCE(asm.sub_category,'Miscellaneous')) [Sub_Category],
+		RTRIM(COALESCE(std.team,'Miscellaneous')) [Team],
+		case when cdr.source_system_code = 'EMI'
+				then udfs.emi_getgroup_byteam_udf(RTRIM(COALESCE(std.team,'Miscellaneous')))
+			when cdr.source_system_code = 'TMF'
+				then udfs.tmf_getgroup_byteam_udf(RTRIM(COALESCE(std.team,'Miscellaneous')))
+			when cdr.source_system_code = 'HEM'
+				then udfs.hem_getgroup_byteam_udf(RTRIM(COALESCE(std.team,'Miscellaneous')))
+		end [Group],
+		std.given_names + ', ' + std.surname [Claims_Officer_Name],
 		'' [EMPL_SIZE],
 		'' [Account_Manager],
 		'' [Portfolio],
 		'' [Broker_Name],
-		'' [Grouping],
 		cdr.claim_number [Claim_No],
-		'' [Policy_No],
+		cd.policy_number [Policy_No],
 		'' [WIC_Code],
 		'' [Company_Name],
 		wd.given_names + ', ' + wd.surname [Worker_Name],
@@ -52,12 +57,12 @@ AS
 		'' [Notification_Lag],
 		'' [Entered_Lag],
 		sd.liability_status_code_description [Claim_Liability_Indicator_Group],
-		'' [Is_Time_Lost],
+		cd.is_time_lost [Is_Time_Lost],
 		sd.claim_closed_flag [Claim_Closed_Flag],
 		cd.date_claim_entered [Date_Claim_Entered],
-		'' [Date_Claim_Closed],
-		'' [Date_Claim_Received],
-		'' [Date_Claim_Reopened],
+		cc_date.date [Date_Claim_Closed],
+		cd.date_notification_received [Date_Claim_Received],
+		co_date.date [Date_Claim_Reopened],
 		itd.result_of_injury_code [Result_Of_Injury_Code],
 		cd.final_wpi_percentage [WPI],
 		'' [Common_Law],
@@ -110,19 +115,29 @@ AS
 		'' [Capacity],
 		'' [Entitlement_Weeks]
 	FROM fact.clm_claim_fact cf
-		INNER JOIN fact.clm_current_status_fact csf
-			ON csf.claim_key = cf.claim_key
-		INNER JOIN dim.clm_worker_dimension wd
-			ON wd.worker_key = cf.worker_key
 		INNER JOIN dim.clm_claim_dimension cd
 			ON cd.claim_key = cf.claim_key
 		INNER JOIN dim.clm_claim_dimension_reference cdr
 			ON cdr.claim_key = cd.claim_key
-		INNER JOIN dim.clm_status_dimension sd
-			ON sd.status_key = csf.status_key
-		INNER JOIN dim.clm_injury_type_dimension itd
+		INNER JOIN fact.clm_activity_fact caf
+			ON cf.claim_key = caf.claim_key
+		LEFT JOIN dim.clm_worker_dimension wd
+			ON wd.worker_key = cf.worker_key
+		LEFT JOIN dim.clm_status_dimension sd
+			ON sd.status_key = caf.status_key
+		LEFT JOIN dim.clm_injury_type_dimension itd
 			ON itd.injury_type_key = cf.injury_type_key
-
+		LEFT JOIN ref.pol_agency_sub_category_mapping_reference asm
+			ON sub.policy_number = cd.policy_number
+		INNER JOIN dim.gen_staff_dimension std
+			ON std.staff_key = caf.case_manager_key
+			
+		-- Dates
+		INNER JOIN dim.gen_date_dimension co_date
+			ON co_date.date_key = csf.date_claim_reopened_key
+		INNER JOIN dim.gen_date_dimension cc_date
+			ON cc_date.date_key = csf.date_claim_closed_key
+		
 		-- Payment transaction view
 		LEFT OUTER JOIN (
 			SELECT

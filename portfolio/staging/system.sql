@@ -1,5 +1,8 @@
 /* Schemas */
 
+IF SCHEMA_ID('udfs') IS NULL
+  EXECUTE('CREATE SCHEMA udfs')
+
 IF SCHEMA_ID('ref') IS NULL
   EXECUTE('CREATE SCHEMA ref')
 

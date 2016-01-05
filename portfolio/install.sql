@@ -7,6 +7,10 @@ SET NOCOUNT ON
 -- staging\system.sql must be executed first
 :r $(path)\staging\system.sql
 
+:r $(path)\udfs\emi_getgroup_byteam_udf.sql
+:r $(path)\udfs\tmf_getgroup_byteam_udf.sql
+:r $(path)\udfs\hem_getgroup_byteam_udf.sql
+
 :r $(path)\reference\pol_agency_sub_category_mapping_reference.sql
 
 :r $(path)\views\claim_portfolio_view.sql
