@@ -78,8 +78,8 @@ AS
 			COALESCE(osteopathy_paid.amount,0) [Osteopathy_Paid],
 			COALESCE(acupuncture_paid.amount,0) [Acupuncture_Paid],
 			COALESCE(rehab_Paid.amount,0) [Rehab_Paid],
-			case when ds.mechanism_of_incident_code in (81,82,84,85,86,87,88)
-					OR ds.nature_of_injury_code in (910,702,703,704,705,706,707,718,719)
+			case when imd.mechanism_of_incident_code in (81,82,84,85,86,87,88)
+					OR itd.nature_of_injury_code in (910,702,703,704,705,706,707,718,719)
 					then 1
 				else 0
 			end [Is_Stress],
@@ -133,12 +133,12 @@ AS
 				ON sd.status_key = caf.status_key
 			INNER JOIN dim.clm_injury_type_dimension itd
 				ON itd.injury_type_key = cf.injury_type_key
+			INNER JOIN dim.clm_injury_mechanism_dimension imd
+				ON imd.injury_mechanism_key = cf.injury_mechanism_key
 			INNER JOIN dim.gen_staff_dimension std
 				ON std.staff_key = caf.case_manager_key
 			LEFT JOIN dim.pol_policy_dimension pd
 				ON pd.policy_number = cd.policy_number
-			LEFT JOIN etl.clm_detail_staging ds
-				ON cdr.source_system_code = ds.source_system_code and cdr.claim_number = ds.claim_number
 				
 			/* Agency, Sub category mapping */
 			LEFT JOIN ref.pol_agency_sub_category_mapping_reference asm
