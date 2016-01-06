@@ -27,7 +27,7 @@ AS
 	/* Get data from data warehouse: IN PROGRESS */
 		
 	SELECT
-			caf.activity_date_key [Reporting_Date],
+			ad_date.date [Reporting_Date],
 			cdr.source_system_code [System],
 			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
 			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
@@ -69,24 +69,21 @@ AS
 			case when sd.work_status_code in (1,2,3,4,14) then 1
 				 when sd.work_status_code in (5,6,7,8,9) then 0
 			end [Is_Working],
-			ISNULL(Total_Recoveries.amount,0) [Total_Recoveries],
+			COALESCE(total_recoveries.amount,0) [Total_Recoveries],
 			COALESCE(incurred.incurred_amount, 0) [Investigation_Incurred],
 			COALESCE(payments.net_amount, 0) [Total_Paid],
-			ISNULL(Physio_Paid.amount,0) [Physio_Paid],
-			ISNULL(Chiro_Paid.amount,0) [Chiro_Paid],
-			ISNULL(Massage_Paid.amount,0) [Massage_Paid],
-			ISNULL(Osteopathy_Paid.amount,0) [Osteopathy_Paid],
-			ISNULL(Acupuncture_Paid.amount,0) [Acupuncture_Paid],
-			ISNULL(Rehab_Paid.amount,0) [Rehab_Paid],
+			COALESCE(physio_paid.amount,0) [Physio_Paid],
+			COALESCE(chiro_paid.amount,0) [Chiro_Paid],
+			COALESCE(massage_paid.amount,0) [Massage_Paid],
+			COALESCE(osteopathy_paid.amount,0) [Osteopathy_Paid],
+			COALESCE(acupuncture_paid.amount,0) [Acupuncture_Paid],
+			COALESCE(rehab_Paid.amount,0) [Rehab_Paid],
 			case when ds.mechanism_of_incident_code in (81,82,84,85,86,87,88)
-								OR ds.nature_of_injury_code in (910,702,703,704,705,706,707,718,719)
-								then 1
-							else 0
-						  end [Is_Stress],
-			case when	ISNULL(Is_Inactive_Claims.amount,0) = 0
-											then 1
-										else 0
-									end [Is_Inactive_Claims],
+					OR ds.nature_of_injury_code in (910,702,703,704,705,706,707,718,719)
+					then 1
+				else 0
+			end [Is_Stress],
+			case when COALESCE(inactive_claims_paid.amount,0) = 0 then 1 else 0 end [Is_Inactive_Claims],
 			'' [Is_Medically_Discharged],
 			'' [Is_Exempt],
 			'' [Is_Reactive],
@@ -152,6 +149,8 @@ AS
 				ON co_date.date_key = caf.date_claim_reopened_key
 			INNER JOIN dim.gen_date_dimension cc_date
 				ON cc_date.date_key = caf.date_claim_closed_key
+			INNER JOIN dim.gen_date_dimension ad_date
+				ON ad_date.date_key = caf.activity_date_key
 		
 			/* Payment transaction view */
 			LEFT OUTER JOIN (
@@ -206,7 +205,7 @@ AS
 				ON common_law.source_system_code = cd.source_system_code
 					AND common_law.claim_number = cd.claim_number
 					
-			/* Physio Paid*/
+			/* Physio Paid */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -220,14 +219,15 @@ AS
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
 				WHERE (ptd.payment_type_code = '05' or ptd.payment_type_code like 'pta%' or ptd.payment_type_code like 'ptx%')
-				and etd.estimate_type_code = '55'
+					and etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Physio_Paid
-				ON Physio_Paid.source_system_code = cd.source_system_code
-					AND Physio_Paid.claim_number = cd.claim_number
-			/* Chiro Paid*/
+			) physio_paid
+				ON physio_paid.source_system_code = cd.source_system_code
+					AND physio_paid.claim_number = cd.claim_number
+					
+			/* Chiro Paid */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -241,14 +241,15 @@ AS
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
 				WHERE (ptd.payment_type_code = '06' or ptd.payment_type_code like 'cha%' or ptd.payment_type_code like 'chx%')
-				and etd.estimate_type_code = '55'
+					and etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Chiro_Paid
-				ON Chiro_Paid.source_system_code = cd.source_system_code
-					AND Chiro_Paid.claim_number = cd.claim_number
-			/* Massage Paid*/
+			) chiro_paid
+				ON chiro_paid.source_system_code = cd.source_system_code
+					AND chiro_paid.claim_number = cd.claim_number
+					
+			/* Massage Paid */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -262,14 +263,15 @@ AS
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
 				WHERE (ptd.payment_type_code like 'rma%' or ptd.payment_type_code like 'rmx%')
-				and etd.estimate_type_code = '55'
+					and etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Massage_Paid
-				ON Massage_Paid.source_system_code = cd.source_system_code
-					AND Massage_Paid.claim_number = cd.claim_number
-			/* Osteopathy Paid*/
+			) massage_paid
+				ON massage_paid.source_system_code = cd.source_system_code
+					AND massage_paid.claim_number = cd.claim_number
+					
+			/* Osteopathy Paid */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -283,14 +285,15 @@ AS
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
 				WHERE (ptd.payment_type_code like 'osa%' or ptd.payment_type_code like 'osx%')
-				and etd.estimate_type_code = '55'
+					and etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Osteopathy_Paid
-				ON Osteopathy_Paid.source_system_code = cd.source_system_code
-					AND Osteopathy_Paid.claim_number = cd.claim_number
-			/* Acupuncture Paid*/
+			) osteopathy_paid
+				ON osteopathy_paid.source_system_code = cd.source_system_code
+					AND osteopathy_paid.claim_number = cd.claim_number
+					
+			/* Acupuncture Paid */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -304,14 +307,15 @@ AS
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
 				WHERE ptd.payment_type_code like 'ott001'
-				and etd.estimate_type_code = '55'
+					and etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Acupuncture_Paid
-				ON Acupuncture_Paid.source_system_code = cd.source_system_code
-					AND Acupuncture_Paid.claim_number = cd.claim_number
-			/* Rehab Paid*/
+			) acupuncture_paid
+				ON acupuncture_paid.source_system_code = cd.source_system_code
+					AND acupuncture_paid.claim_number = cd.claim_number
+					
+			/* Rehab Paid */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -327,15 +331,16 @@ AS
 					INNER JOIN dim.gen_date_dimension gdd
 						ON pf.transaction_date_key = gdd.date_key
 				WHERE (ptd.payment_type_code = '04' or ptd.payment_type_code like 'or%')
-				and etd.estimate_type_code = '55'	
-				and gdd.date_key >= DATEADD(MM, -3, gdd.date_key)			
+					and etd.estimate_type_code = '55'	
+					and gdd.date >= DATEADD(MM, -3, ad_date.date)
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Rehab_Paid
-				ON Rehab_Paid.source_system_code = cd.source_system_code
-					AND Rehab_Paid.claim_number = cd.claim_number
-			/* Total Recoveries*/		
+			) rehab_paid
+				ON rehab_paid.source_system_code = cd.source_system_code
+					AND rehab_paid.claim_number = cd.claim_number
+					
+			/* Total Recoveries */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -350,10 +355,11 @@ AS
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Total_Recoveries
-				ON Total_Recoveries.source_system_code = cd.source_system_code
-					AND Total_Recoveries.claim_number = cd.claim_number
-			/* Is Inactive Claims*/
+			) total_recoveries
+				ON total_recoveries.source_system_code = cd.source_system_code
+					AND total_recoveries.claim_number = cd.claim_number
+					
+			/* Inactive Claims */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -366,12 +372,11 @@ AS
 						ON pf.payment_type_key = ptd.payment_type_key
 					INNER JOIN dim.gen_date_dimension gdd
 						ON pf.transaction_date_key = gdd.date_key
-				WHERE gdd.date_key >= DATEADD(MM, -3, gdd.date_key)			
+				WHERE gdd.date >= DATEADD(MM, -3, ad_date.date)
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
-			) Is_Inactive_Claims
-				ON Is_Inactive_Claims.source_system_code = cd.source_system_code
-					AND Is_Inactive_Claims.claim_number = cd.claim_number
-			
+			) inactive_claims_paid
+				ON inactive_claims_paid.source_system_code = cd.source_system_code
+					AND inactive_claims_paid.claim_number = cd.claim_number
 GO
