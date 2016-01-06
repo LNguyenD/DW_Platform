@@ -253,8 +253,8 @@ AS
 						ON etd.estimate_type_key = pf.estimate_type_key
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
-				WHERE (ptd.payment_type_code = '05' or ptd.payment_type_code like 'pta%' or ptd.payment_type_code like 'ptx%')
-					and etd.estimate_type_code = '55'
+				WHERE (ptd.payment_type_code = '05' OR ptd.payment_type_code like 'pta%' OR ptd.payment_type_code like 'ptx%')
+					AND etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
@@ -275,8 +275,8 @@ AS
 						ON etd.estimate_type_key = pf.estimate_type_key
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
-				WHERE (ptd.payment_type_code = '06' or ptd.payment_type_code like 'cha%' or ptd.payment_type_code like 'chx%')
-					and etd.estimate_type_code = '55'
+				WHERE (ptd.payment_type_code = '06' OR ptd.payment_type_code like 'cha%' OR ptd.payment_type_code like 'chx%')
+					AND etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
@@ -297,8 +297,8 @@ AS
 						ON etd.estimate_type_key = pf.estimate_type_key
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
-				WHERE (ptd.payment_type_code like 'rma%' or ptd.payment_type_code like 'rmx%')
-					and etd.estimate_type_code = '55'
+				WHERE (ptd.payment_type_code like 'rma%' OR ptd.payment_type_code like 'rmx%')
+					AND etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
@@ -319,8 +319,8 @@ AS
 						ON etd.estimate_type_key = pf.estimate_type_key
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
-				WHERE (ptd.payment_type_code like 'osa%' or ptd.payment_type_code like 'osx%')
-					and etd.estimate_type_code = '55'
+				WHERE (ptd.payment_type_code like 'osa%' OR ptd.payment_type_code like 'osx%')
+					AND etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
@@ -342,7 +342,7 @@ AS
 					INNER JOIN dim.clm_payment_type_dimension ptd
 						ON pf.payment_type_key = ptd.payment_type_key
 				WHERE ptd.payment_type_code like 'ott001'
-					and etd.estimate_type_code = '55'
+					AND etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
@@ -355,6 +355,7 @@ AS
 				SELECT
 				  cdr.source_system_code,
 				  cdr.claim_number,
+				  gdd.date transaction_date,
 				  SUM(pf.transaction_amount) amount
 				FROM fact.clm_payment_fact pf
 					INNER JOIN dim.clm_claim_dimension_reference cdr
@@ -365,15 +366,16 @@ AS
 						ON pf.payment_type_key = ptd.payment_type_key
 					INNER JOIN dim.gen_date_dimension gdd
 						ON pf.transaction_date_key = gdd.date_key
-				WHERE (ptd.payment_type_code = '04' or ptd.payment_type_code like 'or%')
-					and etd.estimate_type_code = '55'	
-					and gdd.date >= DATEADD(MM, -3, ad_date.date)
+				WHERE (ptd.payment_type_code = '04' OR ptd.payment_type_code like 'or%')
+					AND etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
-				  cdr.claim_number
+				  cdr.claim_number,
+				  gdd.date
 			) rehab_paid
 				ON rehab_paid.source_system_code = cd.source_system_code
 					AND rehab_paid.claim_number = cd.claim_number
+					AND rehab_paid.transaction_date >= DATEADD(MM, -3, ad_date.date)
 					
 			/* Total Recoveries */
 			LEFT OUTER JOIN (
@@ -399,6 +401,7 @@ AS
 				SELECT
 				  cdr.source_system_code,
 				  cdr.claim_number,
+				  gdd.date transaction_date,
 				  SUM(pf.transaction_amount) amount
 				FROM fact.clm_payment_fact pf
 					INNER JOIN dim.clm_claim_dimension_reference cdr
@@ -407,19 +410,21 @@ AS
 						ON pf.payment_type_key = ptd.payment_type_key
 					INNER JOIN dim.gen_date_dimension gdd
 						ON pf.transaction_date_key = gdd.date_key
-				WHERE gdd.date >= DATEADD(MM, -3, ad_date.date)
 				GROUP BY
 				  cdr.source_system_code,
-				  cdr.claim_number
+				  cdr.claim_number,
+				  gdd.date
 			) inactive_claims_paid
 				ON inactive_claims_paid.source_system_code = cd.source_system_code
 					AND inactive_claims_paid.claim_number = cd.claim_number
+					AND inactive_claims_paid.transaction_date >= DATEADD(MM, -3, ad_date.date)
 					
 			/* Active Weekly */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
 				  cdr.claim_number,
+				  gdd.date transaction_date,
 				  SUM(pf.transaction_amount) amount
 				FROM fact.clm_payment_fact pf
 					INNER JOIN dim.clm_claim_dimension_reference cdr
@@ -430,20 +435,22 @@ AS
 						ON pf.payment_type_key = ptd.payment_type_key
 					INNER JOIN dim.gen_date_dimension gdd
 						ON pf.transaction_date_key = gdd.date_key
-				WHERE gdd.date >= DATEADD(MM, -3, ad_date.date) 
-					and etd.estimate_type_code = '50'
+				WHERE etd.estimate_type_code = '50'
 				GROUP BY
 				  cdr.source_system_code,
-				  cdr.claim_number
+				  cdr.claim_number,
+				  gdd.date
 			) active_weekly
 				ON Active_Weekly.source_system_code = cd.source_system_code
-					AND Active_Weekly.claim_number = cd.claim_number
+					AND active_weekly.claim_number = cd.claim_number
+					AND active_weekly.transaction_date >= DATEADD(MM, -3, ad_date.date)
 					
 			/* Active Medical */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
 				  cdr.claim_number,
+				  gdd.date transaction_date,
 				  SUM(pf.transaction_amount) amount
 				FROM fact.clm_payment_fact pf
 					INNER JOIN dim.clm_claim_dimension_reference cdr
@@ -454,13 +461,13 @@ AS
 						ON pf.payment_type_key = ptd.payment_type_key
 					INNER JOIN dim.gen_date_dimension gdd
 						ON pf.transaction_date_key = gdd.date_key
-				WHERE gdd.date >= DATEADD(MM, -3, ad_date.date) 
-					and etd.estimate_type_code = '55'
+				WHERE etd.estimate_type_code = '55'
 				GROUP BY
 				  cdr.source_system_code,
-				  cdr.claim_number
+				  cdr.claim_number,
+				  gdd.date
 			) active_medical
-				ON Active_Medical.source_system_code = cd.source_system_code
-					AND Active_Medical.claim_number = cd.claim_number
-			
+				ON active_medical.source_system_code = cd.source_system_code
+					AND active_medical.claim_number = cd.claim_number
+					AND active_medical.transaction_date >= DATEADD(MM, -3, ad_date.date)
 GO
