@@ -90,12 +90,28 @@ AS
 			cd.is_medical_only [Is_Medical_Only],
 			'' [Is_D_D],
 			'' [HoursPerWeek],
-			'' [Is_Industrial_Deafness],
+			case when itd.nature_of_injury_code in (152,250,312,389,771)
+												then 1
+											else 0
+										end [Is_Industrial_Deafness],
 			'' [Action_Required],
 			'' [RTW_Impacting],
-			'' [Hindsight],
-			'' [Active_Weekly],
-			'' [Active_Medical],
+			case when cd.date_of_injury > DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-36,ad_date.financial_year)) + 1, 0))
+								 and  cd.date_of_injury <= DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-24,ad_date.financial_year)) + 1, 0)) 
+								 then '3 years'
+							  when cd.date_of_injury > DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-60,ad_date.financial_year)) + 1, 0))
+								 and  cd.date_of_injury <= DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-48,ad_date.financial_year)) + 1, 0)) 
+								 then '5 years'
+							  else ''
+						 end [Hindsight],
+			case when COALESCE(Active_Weekly.amount,0) <> 0
+										then 'Y'
+								  else 'N'
+							 end [Active_Weekly],
+			case when COALESCE(Active_Medical.amount,0) <> 0
+										then 'Y'
+								  else 'N'
+							 end [Active_Medical],
 			'' [Cost_Code],
 			'' [Cost_Code2],
 			'' [CC_Injury],
@@ -379,4 +395,53 @@ AS
 			) inactive_claims_paid
 				ON inactive_claims_paid.source_system_code = cd.source_system_code
 					AND inactive_claims_paid.claim_number = cd.claim_number
+			/* Active Weekly*/
+			LEFT OUTER JOIN (
+				SELECT
+				  cdr.source_system_code,
+				  cdr.claim_number,
+				  SUM(pf.transaction_amount) amount
+				FROM fact.clm_payment_fact pf
+					INNER JOIN dim.clm_claim_dimension_reference cdr
+						ON cdr.claim_key = pf.claim_key				
+					INNER JOIN dim.clm_estimate_type_dimension etd
+						ON etd.estimate_type_key = pf.estimate_type_key	
+					INNER JOIN dim.clm_payment_type_dimension ptd
+						ON pf.payment_type_key = ptd.payment_type_key
+					INNER JOIN dim.gen_date_dimension gdd
+						ON pf.transaction_date_key = gdd.date_key
+				WHERE gdd.date >= DATEADD(MM, -3, ad_date.date) 
+				and etd.estimate_type_code = '50'
+				GROUP BY
+				  cdr.source_system_code,
+				  cdr.claim_number
+			) Active_Weekly
+				ON Active_Weekly.source_system_code = cd.source_system_code
+					AND Active_Weekly.claim_number = cd.claim_number
+					
+			/* Active Medical*/		
+			
+			LEFT OUTER JOIN (
+				SELECT
+				  cdr.source_system_code,
+				  cdr.claim_number,
+				  SUM(pf.transaction_amount) amount
+				FROM fact.clm_payment_fact pf
+					INNER JOIN dim.clm_claim_dimension_reference cdr
+						ON cdr.claim_key = pf.claim_key				
+					INNER JOIN dim.clm_estimate_type_dimension etd
+						ON etd.estimate_type_key = pf.estimate_type_key	
+					INNER JOIN dim.clm_payment_type_dimension ptd
+						ON pf.payment_type_key = ptd.payment_type_key
+					INNER JOIN dim.gen_date_dimension gdd
+						ON pf.transaction_date_key = gdd.date_key
+				WHERE gdd.date >= DATEADD(MM, -3, ad_date.date) 
+				and etd.estimate_type_code = '55'
+				GROUP BY
+				  cdr.source_system_code,
+				  cdr.claim_number
+			) Active_Medical
+				ON Active_Medical.source_system_code = cd.source_system_code
+					AND Active_Medical.claim_number = cd.claim_number
+			
 GO
