@@ -117,36 +117,36 @@ AS
 			'' [CC_Injury],
 			'' [CC_Current],
 			udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received, cd.date_claim_entered), ad_date.date) [Weeks_In],
-			case when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 0 and 12 then 'A.0-12 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 13 and 18 then 'B.13-18 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 19 and 22 then 'C.19-22 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 23 and 26 then 'D.23-26 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 27 and 34 then 'E.27-34 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 35 and 48 then 'F.35-48 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 49 and 52 then 'G.48-52 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 53 and 60 then 'H.53-60 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 61 and 76 then 'I.61-76 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 77 and 90 then 'J.77-90 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 91 and 100 then 'K.91-100 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 101 and 117 then 'L.101-117 WK'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) between 118 and 130 then 'M.117 - 130 WKS'
-				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date) > 130 then 'N.130+ WKS'
+			case when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 0 and 12 then 'A.0-12 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 13 and 18 then 'B.13-18 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 19 and 22 then 'C.19-22 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 23 and 26 then 'D.23-26 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 27 and 34 then 'E.27-34 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 35 and 48 then 'F.35-48 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 49 and 52 then 'G.48-52 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 53 and 60 then 'H.53-60 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 61 and 76 then 'I.61-76 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 77 and 90 then 'J.77-90 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 91 and 100 then 'K.91-100 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 101 and 117 then 'L.101-117 WK'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 118 and 130 then 'M.117 - 130 WKS'
+				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) > 130 then 'N.130+ WKS'
 			end [Weeks_Band],
-			DATEADD(week, udfs.ncmm_get_weeks_udf(COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date),
-				COALESCE(cd.date_claim_received,cd.date_claim_entered)) [NCMM_Complete_Action_Due],
+			DATEADD(week, udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
+				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Complete_Action_Due],
 			'' [NCMM_Complete_Action_Due_2],
 			'' [NCMM_Complete_Remaining_Days],
 			'' [NCMM_Complete_Remaining_Days_2],
 			udfs.ncmm_get_prepareactionduedate_udf(udfs.ncmm_get_weeks_udf(
-				COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date),
-				COALESCE(cd.date_claim_received,cd.date_claim_entered)) [NCMM_Prepare_Action_Due],
+				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
+				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Prepare_Action_Due],
 			'' [NCMM_Prepare_Action_Due_2],
 			'' [NCMM_Prepare_Remaining_Days],
 			'' [NCMM_Prepare_Remaining_Days_2],
 			udfs.ncmm_get_actionthisweek_udf(udfs.ncmm_get_weeks_udf(
-				COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_This_Week],
+				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_This_Week],
 			udfs.ncmm_get_actionnextweek_udf(udfs.ncmm_get_weeks_udf(
-				COALESCE(cd.date_claim_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_Next_Week],
+				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_Next_Week],
 			'' [NCMM_Actions_Next_Week_2],
 			'' [Med_Cert_Status_Prev_1_Week],
 			'' [Med_Cert_Status_Prev_2_Week],
