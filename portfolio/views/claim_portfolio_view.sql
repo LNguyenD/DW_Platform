@@ -29,15 +29,15 @@ AS
 	SELECT
 			caf.activity_date_key [Reporting_Date],
 			cdr.source_system_code [System],
-			RTRIM(COALESCE(asm.agency_name,'Miscellaneous')) [Agency_Name],
-			RTRIM(COALESCE(asm.sub_category,'Miscellaneous')) [Sub_Category],
-			RTRIM(COALESCE(std.team,'Miscellaneous')) [Team],
+			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
+			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
+			COALESCE(std.team,'Miscellaneous') [Team],
 			case when cdr.source_system_code = 'EMI'
-					then udfs.emi_getgroup_byteam_udf(RTRIM(COALESCE(std.team,'Miscellaneous')))
+					then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
 				when cdr.source_system_code = 'TMF'
-					then udfs.tmf_getgroup_byteam_udf(RTRIM(COALESCE(std.team,'Miscellaneous')))
+					then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
 				when cdr.source_system_code = 'HEM'
-					then udfs.hem_getgroup_byteam_udf(RTRIM(COALESCE(std.team,'Miscellaneous')))
+					then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
 			end [Group],
 			std.given_names + ', ' + std.surname [Claims_Officer_Name],
 			'' [EMPL_SIZE],
@@ -47,15 +47,15 @@ AS
 			cdr.claim_number [Claim_No],
 			cd.policy_number [Policy_No],
 			'' [WIC_Code],
-			'' [Company_Name],
+			COALESCE(pd.company_legal_name, cd.policy_number) [Company_Name],
 			wd.given_names + ', ' + wd.surname [Worker_Name],
 			'' [Employee_Number],
-			'' [Worker_Phone_Number],
+			wd.home_phone [Worker_Phone_Number],
 			wd.date_of_birth [Date_Of_Birth],
 			cd.date_of_injury [Date_Of_Injury],
-			'' [Date_Of_Notification],
+			COALESCE(cd.date_notification_received, cd.date_claim_entered) [Date_Of_Notification],
 			'' [Notification_Lag],
-			'' [Entered_Lag],
+			DATEDIFF(day, cd.date_notification_received, cd.date_claim_entered) [Entered_Lag],
 			sd.liability_status_code_description [Claim_Liability_Indicator_Group],
 			cd.is_time_lost [Is_Time_Lost],
 			sd.claim_closed_flag [Claim_Closed_Flag],
@@ -121,24 +121,28 @@ AS
 				ON cdr.claim_key = cd.claim_key
 			INNER JOIN fact.clm_activity_fact caf
 				ON cf.claim_key = caf.claim_key
-			LEFT JOIN dim.clm_worker_dimension wd
+			INNER JOIN dim.clm_worker_dimension wd
 				ON wd.worker_key = cf.worker_key
-			LEFT JOIN dim.clm_status_dimension sd
+			INNER JOIN dim.clm_status_dimension sd
 				ON sd.status_key = caf.status_key
-			LEFT JOIN dim.clm_injury_type_dimension itd
+			INNER JOIN dim.clm_injury_type_dimension itd
 				ON itd.injury_type_key = cf.injury_type_key
-			LEFT JOIN ref.pol_agency_sub_category_mapping_reference asm
-				ON asm.policy_number = cd.policy_number
 			INNER JOIN dim.gen_staff_dimension std
 				ON std.staff_key = caf.case_manager_key
+			LEFT JOIN dim.pol_policy_dimension pd
+				ON pd.policy_number = cd.policy_number
+				
+			/* Agency, Sub category mapping */
+			LEFT JOIN ref.pol_agency_sub_category_mapping_reference asm
+				ON asm.policy_number = cd.policy_number
 			
-			-- Dates
+			/* Dates */
 			INNER JOIN dim.gen_date_dimension co_date
 				ON co_date.date_key = caf.date_claim_reopened_key
 			INNER JOIN dim.gen_date_dimension cc_date
 				ON cc_date.date_key = caf.date_claim_closed_key
 		
-			-- Payment transaction view
+			/* Payment transaction view */
 			LEFT OUTER JOIN (
 				SELECT
 				  cdr.source_system_code,
@@ -156,7 +160,7 @@ AS
 				ON payments.source_system_code = cd.source_system_code
 					AND payments.claim_number = cd.claim_number
 
-			-- Incurred
+			/* Incurred */
 			LEFT OUTER JOIN (
 				SELECT
 				  cd.source_system_code,
