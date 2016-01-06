@@ -46,6 +46,10 @@
           <QueryParameter Name="@End_Date">
             <Value>=Parameters!End_Date.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@Type">
+            <Value>=Parameters!Type.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
         </QueryParameters>
       </SharedDataSet>
       <Fields>

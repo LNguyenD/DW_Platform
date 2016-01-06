@@ -15,8 +15,12 @@
   </DataSets>
   <Reports>
     <ProjectItem>
-      <Name>CPR_Summary.rdl</Name>
-      <FullPath>CPR_Summary.rdl</FullPath>
+      <Name>DW_Demo.rdl</Name>
+      <FullPath>DW_Demo.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Copy of DW_Demo.rdl</Name>
+      <FullPath>Copy of DW_Demo.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>

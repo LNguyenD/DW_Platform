@@ -10,6 +10,12 @@
           <OmitFromQuery>false</OmitFromQuery>
           <rd:DbType>Object</rd:DbType>
         </DataSetParameter>
+        <DataSetParameter Name="@Type">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
         <DataSetParameter Name="@Claim_Liability_Indicator">
           <ReadOnly>false</ReadOnly>
           <Nullable>false</Nullable>
@@ -65,18 +71,88 @@
           <rd:DbType>Object</rd:DbType>
         </DataSetParameter>
       </DataSetParameters>
-      <CommandText>SELECT Value, Type, System, Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type, Sum, Start_Date, 
-                  End_Date
-FROM     views.claim_portfolio_summary_view
-WHERE  (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+      <CommandText>IF @Type = 'agency'
+BEGIN
+	SELECT * FROM views.claim_portfolio_summary_agency_view
+	WHERE (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+					  (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
+					  (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
+					  (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
+					  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
+					  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
+					  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
+					  OPTION (maxrecursion 1100)
+END
+ELSE IF @Type = 'group'
+BEGIN
+    SELECT * FROM views.claim_portfolio_summary_group_view
+    WHERE (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
                   (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
                   (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
                   (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
                   (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
                   = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
-                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END)
-AND (Start_Date = @Start_Date) AND (End_Date = @End_Date)
-OPTION (maxrecursion 1100)</CommandText>
+                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
+    union all
+	SELECT '','','','','','','','','','','','','','New claims',0
+	union all
+	SELECT '','','','','','','','','','','','','','Open claims',0
+	union all
+	SELECT '','','','','','','','','','','','','','Therapy treatment',0
+	union all
+	SELECT '','','','','','','','','','','','','','Lump sum intimations',0
+	union all
+	SELECT '','','','','','','','','','','','','','Claim closures',0
+                  OPTION (maxrecursion 1100)
+END
+ELSE IF @Type = 'account_manager'
+BEGIN
+	SELECT * FROM views.claim_portfolio_summary_account_manager_view
+	WHERE (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+                  (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
+                  (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
+                  (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
+                  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
+                  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
+                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
+                  OPTION (maxrecursion 1100)
+END
+ELSE IF @Type = 'broker'
+BEGIN
+	SELECT * FROM views.claim_portfolio_summary_broker_view
+	WHERE (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+                  (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
+                  (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
+                  (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
+                  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
+                  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
+                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
+                  OPTION (maxrecursion 1100)
+END
+ELSE IF @Type = 'employer_size'
+BEGIN
+	SELECT * FROM views.claim_portfolio_summary_employer_size_view
+	WHERE (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+                  (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
+                  (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
+                  (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
+                  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
+                  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
+                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
+                  OPTION (maxrecursion 1100)
+END
+ELSE IF @Type = 'portfolio'
+BEGIN
+	SELECT * FROM views.claim_portfolio_summary_portfolio_view
+	WHERE (Value = CASE WHEN @Value &lt;&gt; 'all' THEN @Value ELSE Value END) AND 
+                  (Claim_Liability_Indicator_Group = CASE WHEN @Claim_Liability_Indicator &lt;&gt; 'all' THEN @Claim_Liability_Indicator ELSE Claim_Liability_Indicator_Group END) AND 
+                  (Is_Inactive_Claims = CASE WHEN @Inactive_Claims &lt;&gt; 'all' THEN @Inactive_Claims ELSE Is_Inactive_Claims END) AND 
+                  (Is_Stress = CASE WHEN @Psychological_Claims &lt;&gt; 'all' THEN @Psychological_Claims ELSE Is_Stress END) AND 
+                  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
+                  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
+                  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
+                  OPTION (maxrecursion 1100)
+END</CommandText>
     </Query>
     <Fields>
       <Field Name="Value">
@@ -87,8 +163,16 @@ OPTION (maxrecursion 1100)</CommandText>
         <DataField>Type</DataField>
         <rd:TypeName>System.String</rd:TypeName>
       </Field>
+      <Field Name="SubValue">
+        <DataField>SubValue</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
       <Field Name="System">
         <DataField>System</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="SubSubValue">
+        <DataField>SubSubValue</DataField>
         <rd:TypeName>System.String</rd:TypeName>
       </Field>
       <Field Name="Claim_Liability_Indicator_Group">
