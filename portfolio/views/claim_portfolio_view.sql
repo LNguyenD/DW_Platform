@@ -65,8 +65,10 @@ AS
 			co_date.date [Date_Claim_Reopened],
 			itd.result_of_injury_code [Result_Of_Injury_Code],
 			cd.final_wpi_percentage [WPI],
-			'' [Common_Law],
-			'' [Is_Working],
+			case when COALESCE(common_law.amount, 0) > 0 then 1 else 0 end [Common_Law],
+			case when sd.work_status_code in (1,2,3,4,14) then 1
+				 when sd.work_status_code in (5,6,7,8,9) then 0
+			end [Is_Working],
 			'' [Total_Recoveries],
 			COALESCE(incurred.incurred_amount, 0) [Investigation_Incurred],
 			COALESCE(payments.net_amount, 0) [Total_Paid],
@@ -151,8 +153,8 @@ AS
 				  SUM(pf.gross_amount) gross_amount,
 				  MAX(pf.transaction_date_key) last_paid_date_key
 				FROM fact.clm_payment_fact pf
-				INNER JOIN dim.clm_claim_dimension_reference cdr
-				  ON cdr.claim_key = pf.claim_key
+					INNER JOIN dim.clm_claim_dimension_reference cdr
+						ON cdr.claim_key = pf.claim_key
 				GROUP BY
 				  cdr.source_system_code,
 				  cdr.claim_number
@@ -167,12 +169,31 @@ AS
 				  cd.claim_number,
 				  SUM(cif.incurred_amount) incurred_amount
 				FROM fact.clm_incurred_fact cif
-				INNER JOIN dim.clm_claim_dimension cd
-				  ON cd.claim_key = cif.claim_key
+					INNER JOIN dim.clm_claim_dimension cd
+						ON cd.claim_key = cif.claim_key
 				GROUP BY
 				  cd.source_system_code,
 				  cd.claim_number
 			) incurred
 				ON incurred.source_system_code = cd.source_system_code
 					AND incurred.claim_number = cd.claim_number
+					
+			/* Common Law */
+			LEFT OUTER JOIN (
+				SELECT
+				  cdr.source_system_code,
+				  cdr.claim_number,
+				  SUM(pf.transaction_amount) amount
+				FROM fact.clm_payment_fact pf
+					INNER JOIN dim.clm_claim_dimension_reference cdr
+						ON cdr.claim_key = pf.claim_key
+					INNER JOIN dim.clm_estimate_type_dimension etd
+						ON etd.estimate_type_key = pf.estimate_type_key
+				WHERE etd.estimate_type_code = '57'
+				GROUP BY
+				  cdr.source_system_code,
+				  cdr.claim_number
+			) common_law
+				ON common_law.source_system_code = cd.source_system_code
+					AND common_law.claim_number = cd.claim_number
 GO
