@@ -10,6 +10,10 @@ SET NOCOUNT ON
 :r $(path)\udfs\emi_getgroup_byteam_udf.sql
 :r $(path)\udfs\tmf_getgroup_byteam_udf.sql
 :r $(path)\udfs\hem_getgroup_byteam_udf.sql
+:r $(path)\udfs\ncmm_get_weeks_udf.sql
+:r $(path)\udfs\ncmm_get_actionthisweek_udf.sql
+:r $(path)\udfs\ncmm_get_actionnextweek_udf.sql
+:r $(path)\udfs\ncmm_get_prepareactionduedate_udf.sql
 
 :r $(path)\reference\pol_agency_sub_category_mapping_reference.sql
 
