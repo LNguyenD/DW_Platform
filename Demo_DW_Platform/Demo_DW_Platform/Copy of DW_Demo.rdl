@@ -299,7 +299,7 @@
 	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
 	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
 	 or isnothing(Fields!Claim_Type.Value)
-	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6"))</BackgroundColor>
+	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, countdistinct, nothing) Mod 2,"Transparent","#edf2f6"))</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -492,13 +492,22 @@
                             <Color>LightGrey</Color>
                             <Style>Solid</Style>
                           </Border>
+                          <RightBorder>
+                            <Color>=iif(Fields!Claim_Type.Value &lt;&gt; Fields!Parent_Claim_Type.Value, "",
+	iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
+		 or LCASE(Fields!Claim_Type.Value) = "open claims"
+		 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
+		 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
+		 or LCASE(Fields!Claim_Type.Value) = "claim closures"
+		 ,"Gainsboro",IIF(RunningValue(Fields!Parent_Claim_Type.Value, CountDistinct, nothing) Mod 2, "white", "#edf2f6")))</Color>
+                          </RightBorder>
                           <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
 	 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
 	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
 	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
 	 or isnothing(Fields!Claim_Type.Value)
-	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6"))</BackgroundColor>
+	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,"Transparent","#edf2f6"))</BackgroundColor>
                           <VerticalAlign>Middle</VerticalAlign>
                           <PaddingLeft>2pt</PaddingLeft>
                           <PaddingRight>2pt</PaddingRight>
@@ -572,7 +581,7 @@
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
-                                        <Value>=iif(Fields!Claim_Type.Value = Fields!Parent_Claim_Type.Value,"",Fields!Claim_Type.Value)</Value>
+                                        <Value>=iif(Fields!Claim_Type.Value=Fields!Parent_Claim_Type.Value,"",Fields!Claim_Type.Value)</Value>
                                         <Style>
                                           <FontSize>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
@@ -594,13 +603,16 @@
                                     <Color>LightGrey</Color>
                                     <Style>Solid</Style>
                                   </Border>
+                                  <LeftBorder>
+                                    <Color>="transparent"</Color>
+                                  </LeftBorder>
                                   <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
 	 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
 	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
 	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
 	 or isnothing(Fields!Claim_Type.Value)
-	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "Transparent", "#edf2f6"))</BackgroundColor>
+	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,"Transparent","#edf2f6"))</BackgroundColor>
                                   <VerticalAlign>Middle</VerticalAlign>
                                   <PaddingLeft>2pt</PaddingLeft>
                                   <PaddingRight>2pt</PaddingRight>
