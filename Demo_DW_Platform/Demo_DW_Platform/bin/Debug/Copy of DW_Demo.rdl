@@ -457,7 +457,46 @@
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Fields!Parent_Claim_Type.Value</Value>
+                      <Value>=switch(LCASE(Fields!Claim_Type.Value) = "new claims",1
+		,LCASE(Fields!Claim_Type.Value) = "claim_new_all",2
+		,LCASE(Fields!Claim_Type.Value) = "claim_new_lt",3
+		,LCASE(Fields!Claim_Type.Value) = "claim_new_nlt",4
+		,LCASE(Fields!Claim_Type.Value) = "open claims",5
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_all",6
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_0_13",7
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_0_78",8
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_13_26",9
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_26_52",10
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_52_78",11
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_78_130",12
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_gt_130",13
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_nlt",14
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_ncmm_next_week",15
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_ncmm_this_week",16
+		,LCASE(Fields!Claim_Type.Value) = "therapy treatment",17
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_acupuncture",18
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_chiro",19
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_massage",20
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_osteo",21
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_physio",22
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_rehab",23
+		,LCASE(Fields!Claim_Type.Value) = "lump sum intimations",24
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_death",25
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_industrial_deafness",26
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_ppd",27
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_recovery",28
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wpi_all",29
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wpi_0_10",30
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wpi_11_14",31
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wpi_15_20",32
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wpi_21_30",33
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wpi_31_more",34
+		,LCASE(Fields!Claim_Type.Value) = "claim_open_wid",35
+		,LCASE(Fields!Claim_Type.Value) = "claim closures",36
+		,LCASE(Fields!Claim_Type.Value) = "claim_closure",37
+		,LCASE(Fields!Claim_Type.Value) = "claim_re_open",38
+		,LCASE(Fields!Claim_Type.Value) = "claim_still_open",39
+		)</Value>
                     </SortExpression>
                   </SortExpressions>
                   <TablixHeader>
@@ -515,6 +554,7 @@
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
+                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
