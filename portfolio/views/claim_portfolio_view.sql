@@ -94,7 +94,11 @@ AS
 					then 1
 				else 0
 			end [Is_Industrial_Deafness],
-			'' [Action_Required],
+			case when udfs.ncmm_get_actionthisweek_udf(udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)) <> ''
+					or udfs.ncmm_get_actionnextweek_udf(udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)) <> ''
+					then 'Y'
+				else 'N'
+			end [Action_Required],
 			'' [RTW_Impacting],
 			case when cd.date_of_injury > DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-36,ad_date.financial_year)) + 1, 0))
 					 and cd.date_of_injury <= DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-24,ad_date.financial_year)) + 1, 0)) 
@@ -135,13 +139,21 @@ AS
 			DATEADD(week, udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
 				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Complete_Action_Due],
 			'' [NCMM_Complete_Action_Due_2],
-			'' [NCMM_Complete_Remaining_Days],
+			udfs.get_noofworkingdayv2_udf(ad_date.date
+																		,DATEADD(week
+																			,udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)
+																			,COALESCE(cd.date_notification_received,cd.date_claim_entered))
+																		) [NCMM_Complete_Remaining_Days],
 			'' [NCMM_Complete_Remaining_Days_2],
 			udfs.ncmm_get_prepareactionduedate_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
 				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Prepare_Action_Due],
 			'' [NCMM_Prepare_Action_Due_2],
-			'' [NCMM_Prepare_Remaining_Days],
+			udfs.get_noofworkingdayv2_udf(ad_date.date
+																		,udfs.ncmm_get_prepareactionduedate_udf(
+																			udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)
+																			,COALESCE(cd.date_notification_received,cd.date_claim_entered)
+																		)) [NCMM_Prepare_Remaining_Days],
 			'' [NCMM_Prepare_Remaining_Days_2],
 			udfs.ncmm_get_actionthisweek_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_This_Week],
