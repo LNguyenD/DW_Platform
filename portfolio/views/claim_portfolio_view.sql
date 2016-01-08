@@ -26,7 +26,7 @@ AS
 	
 	/* Get data from data warehouse: IN PROGRESS */
 		
-	SELECT
+	SELECT  TOP 3000
 			ad_date.date [Reporting_Date],
 			cdr.source_system_code [System],
 			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
@@ -139,21 +139,17 @@ AS
 			DATEADD(week, udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
 				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Complete_Action_Due],
 			'' [NCMM_Complete_Action_Due_2],
-			udfs.get_noofworkingdayv2_udf(ad_date.date
-																		,DATEADD(week
-																			,udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)
-																			,COALESCE(cd.date_notification_received,cd.date_claim_entered))
-																		) [NCMM_Complete_Remaining_Days],
+			udfs.get_workingdays_udf(ad_date.date, DATEADD(week,
+				udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date),
+				COALESCE(cd.date_notification_received,cd.date_claim_entered))) [NCMM_Complete_Remaining_Days],
 			'' [NCMM_Complete_Remaining_Days_2],
 			udfs.ncmm_get_prepareactionduedate_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
 				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Prepare_Action_Due],
 			'' [NCMM_Prepare_Action_Due_2],
-			udfs.get_noofworkingdayv2_udf(ad_date.date
-																		,udfs.ncmm_get_prepareactionduedate_udf(
-																			udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)
-																			,COALESCE(cd.date_notification_received,cd.date_claim_entered)
-																		)) [NCMM_Prepare_Remaining_Days],
+			udfs.get_workingdays_udf(ad_date.date, udfs.ncmm_get_prepareactionduedate_udf(
+				udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date),
+				COALESCE(cd.date_notification_received,cd.date_claim_entered))) [NCMM_Prepare_Remaining_Days],
 			'' [NCMM_Prepare_Remaining_Days_2],
 			udfs.ncmm_get_actionthisweek_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_This_Week],
@@ -172,17 +168,17 @@ AS
 				ON cd.claim_key = cf.claim_key
 			INNER JOIN dim.clm_claim_dimension_reference cdr
 				ON cdr.claim_key = cd.claim_key
-			INNER JOIN fact.clm_activity_fact caf
+			LEFT JOIN fact.clm_activity_fact caf
 				ON cf.claim_key = caf.claim_key
-			INNER JOIN dim.clm_worker_dimension wd
+			LEFT JOIN dim.clm_worker_dimension wd
 				ON wd.worker_key = cf.worker_key
-			INNER JOIN dim.clm_status_dimension sd
+			LEFT JOIN dim.clm_status_dimension sd
 				ON sd.status_key = caf.status_key
 			INNER JOIN dim.clm_injury_type_dimension itd
 				ON itd.injury_type_key = cf.injury_type_key
 			INNER JOIN dim.clm_injury_mechanism_dimension imd
 				ON imd.injury_mechanism_key = cf.injury_mechanism_key
-			INNER JOIN dim.gen_staff_dimension std
+			LEFT JOIN dim.gen_staff_dimension std
 				ON std.staff_key = caf.case_manager_key
 			LEFT JOIN dim.pol_policy_dimension pd
 				ON pd.policy_number = cd.policy_number
@@ -192,11 +188,11 @@ AS
 				ON asm.policy_number = cd.policy_number
 			
 			/* Dates */
-			INNER JOIN dim.gen_date_dimension co_date
+			LEFT JOIN dim.gen_date_dimension co_date
 				ON co_date.date_key = caf.date_claim_reopened_key
-			INNER JOIN dim.gen_date_dimension cc_date
+			LEFT JOIN dim.gen_date_dimension cc_date
 				ON cc_date.date_key = caf.date_claim_closed_key
-			INNER JOIN dim.gen_date_dimension ad_date
+			LEFT JOIN dim.gen_date_dimension ad_date
 				ON ad_date.date_key = caf.activity_date_key
 		
 			/* Payment transaction view */
