@@ -27,24 +27,34 @@ AS
 	/* Get data from data warehouse: IN PROGRESS */
 		
 	SELECT  TOP 3000
-			ad_date.date [Reporting_Date],
+			--ad_date.date [Reporting_Date],
+			'2014-12-31 23:59' [Reporting_Date],
 			cdr.source_system_code [System],
 			
 			/* Agents */
 			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
 			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
-			COALESCE(std.team,'Miscellaneous') [Team],
-			case when cdr.source_system_code = 'EMI'
-					then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-				when cdr.source_system_code = 'TMF'
-					then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-				when cdr.source_system_code = 'HEM'
-					then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			end [Group],
-			std.given_names + ', ' + std.surname [Claims_Officer_Name],
-			'' [EMPL_SIZE],
-			'' [Account_Manager],
-			'' [Portfolio],
+			
+			--COALESCE(std.team,'Miscellaneous') [Team],
+			--case when cdr.source_system_code = 'EMI'
+			--		then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+			--	when cdr.source_system_code = 'TMF'
+			--		then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+			--	when cdr.source_system_code = 'HEM'
+			--		then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+			--end [Group],
+			--std.given_names + ', ' + std.surname [Claims_Officer_Name],
+			--'' [EMPL_SIZE],
+			--'' [Account_Manager],
+			--'' [Portfolio],
+			--'' [Broker_Name],
+			
+			'WCNSW6B' [Team],
+			'WCNSW6' [Group],
+			'Erin Bartley' [Claims_Officer_Name],
+			'C - Medium' [EMPL_SIZE],
+			'Lauren Christiansen' [Account_Manager],
+			'Other' [Portfolio],
 			'' [Broker_Name],
 			
 			cdr.claim_number [Claim_No],
@@ -59,13 +69,18 @@ AS
 			COALESCE(cd.date_notification_received, cd.date_claim_entered) [Date_Of_Notification],
 			'' [Notification_Lag],
 			DATEDIFF(day, cd.date_notification_received, cd.date_claim_entered) [Entered_Lag],
-			sd.liability_status_code_description [Claim_Liability_Indicator_Group],
+			--sd.liability_status_code_description [Claim_Liability_Indicator_Group],
+			'Notification of work related injury' [Claim_Liability_Indicator_Group],
 			case when cd.is_time_lost = 'Yes' then 1 else 0 end [Is_Time_Lost],
 			sd.claim_closed_flag [Claim_Closed_Flag],
-			cd.date_claim_entered [Date_Claim_Entered],
-			cc_date.date [Date_Claim_Closed],
-			cd.date_notification_received [Date_Claim_Received],
-			co_date.date [Date_Claim_Reopened],
+			--cd.date_claim_entered [Date_Claim_Entered],
+			--cc_date.date [Date_Claim_Closed],
+			--cd.date_notification_received [Date_Claim_Received],
+			--co_date.date [Date_Claim_Reopened],
+			'2014-01-01' [Date_Claim_Entered],
+			'2014-01-01' [Date_Claim_Closed],
+			'2014-01-01' [Date_Claim_Received],
+			'2014-01-01' [Date_Claim_Reopened],
 			itd.result_of_injury_code [Result_Of_Injury_Code],
 			cd.final_wpi_percentage [WPI],
 			case when COALESCE(common_law.amount, 0) > 0 then 1 else 0 end [Common_Law],
