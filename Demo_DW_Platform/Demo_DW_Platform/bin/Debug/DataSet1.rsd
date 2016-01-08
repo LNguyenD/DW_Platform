@@ -81,7 +81,17 @@ BEGIN
 					  (Is_Medically_Discharged = CASE WHEN @Medically_Discharged &lt;&gt; 'all' THEN @Medically_Discharged ELSE Is_Medically_Discharged END) AND (ISNULL(Is_Exempt, 0) 
 					  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
 					  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
-					  OPTION (maxrecursion 1100)
+	union all
+	SELECT '','','','','','','','','','','','','','New claims',0
+	union all
+	SELECT '','','','','','','','','','','','','','Open claims',0
+	union all
+	SELECT '','','','','','','','','','','','','','Therapy treatment',0
+	union all
+	SELECT '','','','','','','','','','','','','','Lump sum intimations',0
+	union all
+	SELECT '','','','','','','','','','','','','','Claim closures',0
+                  OPTION (maxrecursion 1100)
 END
 ELSE IF @Type = 'group'
 BEGIN

@@ -260,7 +260,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value))</Value>
+                                  <Value>=iif(isnothing(Fields!Claim_Type.Value),"",iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value)))</Value>
                                   <Style>
                                     <FontWeight>=iif(InStr(Fields!Value.Value, "_total") &gt; 0, "Bold", "Default")</FontWeight>
                                   </Style>
@@ -509,7 +509,34 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>=Fields!Parent_Claim_Type.Value</Value>
+                                <Value>=iif(Fields!Claim_Type.Value &lt;&gt; Fields!Parent_Claim_Type.Value,Fields!Parent_Claim_Type.Value,
+	switch(Fields!Parent_Claim_Type.Value = "claim_new_all", "All new claims",
+			Fields!Parent_Claim_Type.Value = "claim_new_lt", "Time lost claims",
+			Fields!Parent_Claim_Type.Value = "claim_new_nlt", "Non time lost claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_all", "All open claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_ncmm_this_week","NCMM actions for this week",
+			Fields!Parent_Claim_Type.Value = "claim_open_ncmm_next_week","NCMM actions for next week",
+			Fields!Parent_Claim_Type.Value = "claim_open_nlt","Non time lost claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_acupuncture","Acupuncture",
+			Fields!Parent_Claim_Type.Value = "claim_open_chiro","Chiro &gt; $1.000",
+			Fields!Parent_Claim_Type.Value = "claim_open_massage","Massage",
+			Fields!Parent_Claim_Type.Value = "claim_open_osteo","Osteopathy",
+			Fields!Parent_Claim_Type.Value = "claim_open_physio","Physio &gt; $2.000",
+			Fields!Parent_Claim_Type.Value = "claim_open_rehab","Rehab",
+			Fields!Parent_Claim_Type.Value = "claim_open_death","Death claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_industrial_deafness","Industrial deafness claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_ppd","Permanent partial disablement claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_recovery","Recoveries claims",
+			Fields!Parent_Claim_Type.Value = "claim_open_wid","Common law",
+			Fields!Parent_Claim_Type.Value = "claim_closure","Claim closures",
+			Fields!Parent_Claim_Type.Value = "claim_re_open","Reopened claims",
+			Fields!Parent_Claim_Type.Value = "claim_still_open","Reopened claims: Still open",
+			Fields!Parent_Claim_Type.Value = "New claims","New claims",
+			Fields!Parent_Claim_Type.Value = "Open claims","Open claims",
+			Fields!Parent_Claim_Type.Value = "Therapy treatment","Therapy treatment",
+			Fields!Parent_Claim_Type.Value = "Lump sum intimations","Lump sum intimations",
+			Fields!Parent_Claim_Type.Value = "Claim closures","Claim closures"
+			))</Value>
                                 <Style>
                                   <FontSize>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
@@ -538,7 +565,7 @@
 		 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
 		 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
 		 or LCASE(Fields!Claim_Type.Value) = "claim closures"
-		 ,"Gainsboro",IIF(RunningValue(Fields!Parent_Claim_Type.Value, CountDistinct, nothing) Mod 2, "white", "#edf2f6")))</Color>
+		 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "white", "#edf2f6")))</Color>
                           </RightBorder>
                           <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
@@ -554,7 +581,6 @@
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
-                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
@@ -621,7 +647,29 @@
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
-                                        <Value>=iif(Fields!Claim_Type.Value=Fields!Parent_Claim_Type.Value,"",Fields!Claim_Type.Value)</Value>
+                                        <Value>=iif(Fields!Claim_Type.Value=Fields!Parent_Claim_Type.Value,"",
+	 switch(Fields!Claim_Type.Value = "claim_open_0_13","0 - 13 weeks",
+		Fields!Claim_Type.Value = "claim_open_13_26","13 - 26 weeks",
+		Fields!Claim_Type.Value = "claim_open_26_52","26 - 52 weeks",
+		Fields!Claim_Type.Value = "claim_open_52_78","52 - 78 weeks",
+		Fields!Claim_Type.Value = "claim_open_0_78","SubTotal 0-78",
+		Fields!Claim_Type.Value = "claim_open_78_130","78 - 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_gt_130","&gt; 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_05","&lt; 5 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_013","&lt; 13 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_26","&lt; 26 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_52","&lt; 52 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_78","&lt; 78 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_104","&lt; 104 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_130","&lt; 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_ge_130","&gt;= 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_wpi_all","All",
+		Fields!Claim_Type.Value = "claim_open_wpi_0_10","0 - 10%",
+		Fields!Claim_Type.Value = "claim_open_wpi_11_14","11 - 14%",
+		Fields!Claim_Type.Value = "claim_open_wpi_15_20","15 - 20%",
+		Fields!Claim_Type.Value = "claim_open_wpi_21_30","21 - 30%",
+		Fields!Claim_Type.Value = "claim_open_wpi_31_more","&gt;= 31%")
+	 )</Value>
                                         <Style>
                                           <FontSize>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
