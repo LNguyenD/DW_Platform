@@ -2,7 +2,7 @@
 
 SET NOCOUNT ON
 
-:setvar path "E:\d.vo\Work\Document\DW_Platform\Framework\portfolio"
+:setvar path "E:\d.vo\Work\Repos\DW_Platform\portfolio"
 
 -- staging\system.sql must be executed first
 :r $(path)\staging\system.sql
@@ -14,8 +14,10 @@ SET NOCOUNT ON
 :r $(path)\udfs\ncmm_get_actionthisweek_udf.sql
 :r $(path)\udfs\ncmm_get_actionnextweek_udf.sql
 :r $(path)\udfs\ncmm_get_prepareactionduedate_udf.sql
+:r $(path)\udfs\get_workingdays_udf.sql
 
 :r $(path)\reference\pol_agency_sub_category_mapping_reference.sql
+:r $(path)\reference\public_hols_reference.sql
 
 :r $(path)\views\claim_portfolio_view.sql
 :r $(path)\views\claim_portfolio_summary_bymode_agency_view.sql

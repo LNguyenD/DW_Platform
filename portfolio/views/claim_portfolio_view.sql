@@ -26,24 +26,37 @@ AS
 	
 	/* Get data from data warehouse: IN PROGRESS */
 		
-	SELECT
-			ad_date.date [Reporting_Date],
+	SELECT  TOP 3000
+			--ad_date.date [Reporting_Date],
+			'2014-12-31 23:59' [Reporting_Date],
 			cdr.source_system_code [System],
+			
+			/* Agents */
 			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
 			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
-			COALESCE(std.team,'Miscellaneous') [Team],
-			case when cdr.source_system_code = 'EMI'
-					then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-				when cdr.source_system_code = 'TMF'
-					then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-				when cdr.source_system_code = 'HEM'
-					then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			end [Group],
-			std.given_names + ', ' + std.surname [Claims_Officer_Name],
-			'' [EMPL_SIZE],
-			'' [Account_Manager],
-			'' [Portfolio],
+			
+			--COALESCE(std.team,'Miscellaneous') [Team],
+			--case when cdr.source_system_code = 'EMI'
+			--		then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+			--	when cdr.source_system_code = 'TMF'
+			--		then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+			--	when cdr.source_system_code = 'HEM'
+			--		then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+			--end [Group],
+			--std.given_names + ', ' + std.surname [Claims_Officer_Name],
+			--'' [EMPL_SIZE],
+			--'' [Account_Manager],
+			--'' [Portfolio],
+			--'' [Broker_Name],
+			
+			'WCNSW6B' [Team],
+			'WCNSW6' [Group],
+			'Erin Bartley' [Claims_Officer_Name],
+			'C - Medium' [EMPL_SIZE],
+			'Lauren Christiansen' [Account_Manager],
+			'Other' [Portfolio],
 			'' [Broker_Name],
+			
 			cdr.claim_number [Claim_No],
 			cd.policy_number [Policy_No],
 			'' [WIC_Code],
@@ -56,19 +69,26 @@ AS
 			COALESCE(cd.date_notification_received, cd.date_claim_entered) [Date_Of_Notification],
 			'' [Notification_Lag],
 			DATEDIFF(day, cd.date_notification_received, cd.date_claim_entered) [Entered_Lag],
-			sd.liability_status_code_description [Claim_Liability_Indicator_Group],
-			cd.is_time_lost [Is_Time_Lost],
+			--sd.liability_status_code_description [Claim_Liability_Indicator_Group],
+			'Notification of work related injury' [Claim_Liability_Indicator_Group],
+			case when cd.is_time_lost = 'Yes' then 1 else 0 end [Is_Time_Lost],
 			sd.claim_closed_flag [Claim_Closed_Flag],
-			cd.date_claim_entered [Date_Claim_Entered],
-			cc_date.date [Date_Claim_Closed],
-			cd.date_notification_received [Date_Claim_Received],
-			co_date.date [Date_Claim_Reopened],
+			--cd.date_claim_entered [Date_Claim_Entered],
+			--cc_date.date [Date_Claim_Closed],
+			--cd.date_notification_received [Date_Claim_Received],
+			--co_date.date [Date_Claim_Reopened],
+			'2014-12-31' [Date_Claim_Entered],
+			'2014-12-31' [Date_Claim_Closed],
+			'2014-12-31' [Date_Claim_Received],
+			'2014-12-31' [Date_Claim_Reopened],
 			itd.result_of_injury_code [Result_Of_Injury_Code],
 			cd.final_wpi_percentage [WPI],
 			case when COALESCE(common_law.amount, 0) > 0 then 1 else 0 end [Common_Law],
 			case when sd.work_status_code in (1,2,3,4,14) then 1
 				 when sd.work_status_code in (5,6,7,8,9) then 0
 			end [Is_Working],
+			
+			/* Payments */
 			COALESCE(total_recoveries.amount,0) [Total_Recoveries],
 			COALESCE(incurred.incurred_amount, 0) [Investigation_Incurred],
 			COALESCE(payments.net_amount, 0) [Total_Paid],
@@ -78,6 +98,7 @@ AS
 			COALESCE(osteopathy_paid.amount,0) [Osteopathy_Paid],
 			COALESCE(acupuncture_paid.amount,0) [Acupuncture_Paid],
 			COALESCE(rehab_Paid.amount,0) [Rehab_Paid],
+			
 			case when imd.mechanism_of_incident_code in (81,82,84,85,86,87,88)
 					OR itd.nature_of_injury_code in (910,702,703,704,705,706,707,718,719)
 					then 1
@@ -94,7 +115,11 @@ AS
 					then 1
 				else 0
 			end [Is_Industrial_Deafness],
-			'' [Action_Required],
+			case when udfs.ncmm_get_actionthisweek_udf(udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)) <> ''
+					or udfs.ncmm_get_actionnextweek_udf(udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date)) <> ''
+					then 'Y'
+				else 'N'
+			end [Action_Required],
 			'' [RTW_Impacting],
 			case when cd.date_of_injury > DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-36,ad_date.financial_year)) + 1, 0))
 					 and cd.date_of_injury <= DATEADD(day, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH,-24,ad_date.financial_year)) + 1, 0)) 
@@ -132,27 +157,31 @@ AS
 				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) between 118 and 130 then 'M.117 - 130 WKS'
 				when udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date) > 130 then 'N.130+ WKS'
 			end [Weeks_Band],
+			
+			/* NCMM */
 			DATEADD(week, udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
 				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Complete_Action_Due],
-			'' [NCMM_Complete_Action_Due_2],
-			'' [NCMM_Complete_Remaining_Days],
-			'' [NCMM_Complete_Remaining_Days_2],
+			udfs.get_workingdays_udf(ad_date.date, DATEADD(week,
+				udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date),
+				COALESCE(cd.date_notification_received,cd.date_claim_entered))) [NCMM_Complete_Remaining_Days],
 			udfs.ncmm_get_prepareactionduedate_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date),
 				COALESCE(cd.date_notification_received,cd.date_claim_entered)) [NCMM_Prepare_Action_Due],
-			'' [NCMM_Prepare_Action_Due_2],
-			'' [NCMM_Prepare_Remaining_Days],
-			'' [NCMM_Prepare_Remaining_Days_2],
+			udfs.get_workingdays_udf(ad_date.date, udfs.ncmm_get_prepareactionduedate_udf(
+				udfs.ncmm_get_weeks_udf(COALESCE(cd.date_notification_received,cd.date_claim_entered),ad_date.date),
+				COALESCE(cd.date_notification_received,cd.date_claim_entered))) [NCMM_Prepare_Remaining_Days],
 			udfs.ncmm_get_actionthisweek_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_This_Week],
 			udfs.ncmm_get_actionnextweek_udf(udfs.ncmm_get_weeks_udf(
 				COALESCE(cd.date_notification_received,cd.date_claim_entered), ad_date.date)) [NCMM_Actions_Next_Week],
-			'' [NCMM_Actions_Next_Week_2],
+			
+			/* Medical Certs */
 			'' [Med_Cert_Status_Prev_1_Week],
 			'' [Med_Cert_Status_Prev_2_Week],
 			'' [Med_Cert_Status_Prev_3_Week],
 			'' [Med_Cert_Status_Prev_4_Week],
 			'' [Med_Cert_Status],
+			
 			'' [Capacity],
 			'' [Entitlement_Weeks]
 	FROM	fact.clm_claim_fact cf
@@ -160,17 +189,17 @@ AS
 				ON cd.claim_key = cf.claim_key
 			INNER JOIN dim.clm_claim_dimension_reference cdr
 				ON cdr.claim_key = cd.claim_key
-			INNER JOIN fact.clm_activity_fact caf
+			LEFT JOIN fact.clm_activity_fact caf
 				ON cf.claim_key = caf.claim_key
-			INNER JOIN dim.clm_worker_dimension wd
+			LEFT JOIN dim.clm_worker_dimension wd
 				ON wd.worker_key = cf.worker_key
-			INNER JOIN dim.clm_status_dimension sd
+			LEFT JOIN dim.clm_status_dimension sd
 				ON sd.status_key = caf.status_key
 			INNER JOIN dim.clm_injury_type_dimension itd
 				ON itd.injury_type_key = cf.injury_type_key
 			INNER JOIN dim.clm_injury_mechanism_dimension imd
 				ON imd.injury_mechanism_key = cf.injury_mechanism_key
-			INNER JOIN dim.gen_staff_dimension std
+			LEFT JOIN dim.gen_staff_dimension std
 				ON std.staff_key = caf.case_manager_key
 			LEFT JOIN dim.pol_policy_dimension pd
 				ON pd.policy_number = cd.policy_number
@@ -180,11 +209,11 @@ AS
 				ON asm.policy_number = cd.policy_number
 			
 			/* Dates */
-			INNER JOIN dim.gen_date_dimension co_date
+			LEFT JOIN dim.gen_date_dimension co_date
 				ON co_date.date_key = caf.date_claim_reopened_key
-			INNER JOIN dim.gen_date_dimension cc_date
+			LEFT JOIN dim.gen_date_dimension cc_date
 				ON cc_date.date_key = caf.date_claim_closed_key
-			INNER JOIN dim.gen_date_dimension ad_date
+			LEFT JOIN dim.gen_date_dimension ad_date
 				ON ad_date.date_key = caf.activity_date_key
 		
 			/* Payment transaction view */
