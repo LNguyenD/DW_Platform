@@ -3,10 +3,12 @@ IF OBJECT_ID('views.claim_portfolio_detail_lastmonth_employer_size_view') IS NOT
 GO
 CREATE VIEW views.claim_portfolio_detail_lastmonth_employer_size_view
 AS
+	/* EMPLOYER_SIZE */
+	
 	WITH
 	claim_new_all AS
 	(
-		SELECT Agency_Name, Sub_Category, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
+		SELECT Value = EMPL_SIZE, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
 				Date_Claim_Entered, Date_Claim_Closed, Date_Claim_Received, Date_Claim_Reopened,
 				Result_Of_Injury_Code, WPI, Common_Law, Total_Recoveries, Med_Cert_Status, Is_Working, Physio_Paid,
 				Chiro_Paid, Massage_Paid, Osteopathy_Paid, Acupuncture_Paid, Rehab_Paid, Is_Medical_Only, Is_D_D,
@@ -18,7 +20,7 @@ AS
 	),
 	claim_open_all AS
 	(
-		SELECT Agency_Name, Sub_Category, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
+		SELECT Value = EMPL_SIZE, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
 				Date_Claim_Entered, Date_Claim_Closed, Date_Claim_Received, Date_Claim_Reopened,
 				Result_Of_Injury_Code, WPI, Common_Law, Total_Recoveries, Med_Cert_Status, Is_Working, Physio_Paid,
 				Chiro_Paid, Massage_Paid, Osteopathy_Paid, Acupuncture_Paid, Rehab_Paid, Is_Medical_Only, Is_D_D,
@@ -32,7 +34,7 @@ AS
 	),
 	claim_closure AS
 	(
-		SELECT Agency_Name, Sub_Category, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
+		SELECT Value = EMPL_SIZE, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
 				Date_Claim_Entered, Date_Claim_Closed, Date_Claim_Received, Date_Claim_Reopened,
 				Result_Of_Injury_Code, WPI, Common_Law, Total_Recoveries, Med_Cert_Status, Is_Working, Physio_Paid,
 				Chiro_Paid, Massage_Paid, Osteopathy_Paid, Acupuncture_Paid, Rehab_Paid, Is_Medical_Only, Is_D_D,
@@ -48,7 +50,7 @@ AS
 	),
 	claim_re_open AS
 	(
-		SELECT Agency_Name, Sub_Category, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
+		SELECT Value = EMPL_SIZE, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
 				Date_Claim_Entered, Date_Claim_Closed, Date_Claim_Received, Date_Claim_Reopened,
 				Result_Of_Injury_Code, WPI, Common_Law, Total_Recoveries, Med_Cert_Status, Is_Working, Physio_Paid,
 				Chiro_Paid, Massage_Paid, Osteopathy_Paid, Acupuncture_Paid, Rehab_Paid, Is_Medical_Only, Is_D_D,
@@ -60,7 +62,7 @@ AS
 	),
 	claim_re_open_still_open AS
 	(
-		SELECT Agency_Name, Sub_Category, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
+		SELECT Value = EMPL_SIZE, [System], Claim_No, Date_Of_Injury, Is_Time_Lost, Claim_Closed_Flag,
 				Date_Claim_Entered, Date_Claim_Closed, Date_Claim_Received, Date_Claim_Reopened,
 				Result_Of_Injury_Code, WPI, Common_Law, Total_Recoveries, Med_Cert_Status, Is_Working, Physio_Paid,
 				Chiro_Paid, Massage_Paid, Osteopathy_Paid, Acupuncture_Paid, Rehab_Paid, Is_Medical_Only, Is_D_D,
@@ -118,11 +120,10 @@ AS
 	),
 	claim_total_summary AS
 	(
-		SELECT	CAST(tmp.Agency_Name AS VARCHAR(256)) AS [Value]
-				,CAST(tmp.Sub_Category AS VARCHAR(256)) AS [SubValue]
+		SELECT	CAST(tmp.Value AS VARCHAR(256)) AS [Value]
+				,CAST('' AS VARCHAR(256)) AS [SubValue]
 				,CAST('' AS VARCHAR(256)) AS [SubSubValue]
-				,CAST('agency' AS VARCHAR(20)) AS [Type]
-				,tmp.[System], tmp.Claim_Type, tmp.iClaim_Type
+				,tmp.[System], tmp.Claim_Type
 				,COALESCE(tmp1.ffsd_at_work_15_less, 0) as ffsd_at_work_15_less
 				,COALESCE(tmp2.ffsd_at_work_15_more, 0) as ffsd_at_work_15_more
 				,COALESCE(tmp3.ffsd_not_at_work, 0) as ffsd_not_at_work
@@ -137,124 +138,124 @@ AS
 				,COALESCE(tmp12.overall, 0) as overall
 		FROM	
 		(
-			/* AGENCY -> SUB_CATEGORY */
-			
 			select * from views.claim_getall_claimtype_view
-			cross join (select distinct Agency_Name, Sub_Category, [System]
-						from views.claim_portfolio_view
-						where Agency_Name <> '' and Sub_Category <> '') as tmp_value
+			cross join (select distinct Value, [System]
+						from claim_all
+						where Value <> '') as tmp_value
 		) as tmp
 		LEFT OUTER JOIN
 		(
-			select COUNT(distinct Claim_No) as ffsd_at_work_15_less, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as ffsd_at_work_15_less, [System], Value, claim_type
 			from claim_all 
 			where Med_Cert_Status = 'SID' and Is_Working = 1 and HoursPerWeek <= 15
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp1 ON tmp1.[System] = tmp.[System] and tmp1.Agency_Name = tmp.Agency_Name 
-			and tmp1.Sub_Category = tmp.Sub_Category and tmp1.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp1 ON tmp1.[System] = tmp.[System] and tmp1.Value = tmp.Value 
+			and tmp1.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as ffsd_at_work_15_more, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as ffsd_at_work_15_more, [System], Value, claim_type
 			from claim_all 
 			where Med_Cert_Status = 'SID' and Is_Working = 1 and HoursPerWeek > 15
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp2 ON tmp2.[System] = tmp.[System] and tmp2.Agency_Name = tmp.Agency_Name 
-			and tmp2.Sub_Category = tmp.Sub_Category and tmp2.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp2 ON tmp2.[System] = tmp.[System] and tmp2.Value = tmp.Value 
+			and tmp2.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as ffsd_not_at_work, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as ffsd_not_at_work, [System], Value, claim_type
 			from claim_all 
 			where Med_Cert_Status = 'SID' and Is_Working = 0
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp3 ON tmp3.[System] = tmp.[System] and tmp3.Agency_Name = tmp.Agency_Name 
-			and tmp3.Sub_Category = tmp.Sub_Category and tmp3.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp3 ON tmp3.[System] = tmp.[System] and tmp3.Value = tmp.Value 
+			and tmp3.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as pid, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as pid, [System], Value, claim_type
 			from claim_all 
 			where Med_Cert_Status = 'PID'
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp4 ON tmp4.[System] = tmp.[System] and tmp4.Agency_Name = tmp.Agency_Name 
-			and tmp4.Sub_Category = tmp.Sub_Category and tmp4.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp4 ON tmp4.[System] = tmp.[System] and tmp4.Value = tmp.Value 
+			and tmp4.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN
 		(
-			select COUNT(distinct Claim_No) as totally_unfit, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as totally_unfit, [System], Value, claim_type
 			from claim_all 
 			where Med_Cert_Status = 'TU'
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp5 ON tmp5.[System] = tmp.[System] and tmp5.Agency_Name = tmp.Agency_Name 
-			and tmp5.Sub_Category = tmp.Sub_Category and tmp5.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp5 ON tmp5.[System] = tmp.[System] and tmp5.Value = tmp.Value 
+			and tmp5.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN
 		(
-			select COUNT(distinct Claim_No) as therapy_treat, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as therapy_treat, [System], Value, claim_type
 			from claim_all
 			where Physio_Paid > 2000 or Chiro_Paid > 1000 or Massage_Paid > 0 or Osteopathy_Paid > 0 or Acupuncture_Paid > 0 or Rehab_Paid > 0
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp6 ON tmp6.[System] = tmp.[System] and tmp6.Agency_Name = tmp.Agency_Name
-			and tmp6.Sub_Category = tmp.Sub_Category and tmp6.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp6 ON tmp6.[System] = tmp.[System] and tmp6.Value = tmp.Value
+			and tmp6.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as d_d, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as d_d, [System], Value, claim_type
 			from claim_all 
 			where Is_D_D = 1
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp7 ON tmp7.[System] = tmp.[System] and tmp7.Agency_Name = tmp.Agency_Name 
-			and tmp7.Sub_Category = tmp.Sub_Category and tmp7.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp7 ON tmp7.[System] = tmp.[System] and tmp7.Value = tmp.Value 
+			and tmp7.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as med_only, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as med_only, [System], Value, claim_type
 			from claim_all 
 			where Is_Medical_Only = 1
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp8 ON tmp8.[System] = tmp.[System] and tmp8.Agency_Name = tmp.Agency_Name 
-			and tmp8.Sub_Category = tmp.Sub_Category and tmp8.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp8 ON tmp8.[System] = tmp.[System] and tmp8.Value = tmp.Value 
+			and tmp8.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as lum_sum_in, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as lum_sum_in, [System], Value, claim_type
 			from claim_all 
 			where Total_Recoveries <> 0 or Common_Law = 1 or WPI >= 0
 				or Result_Of_Injury_Code = 3 or Result_Of_Injury_Code = 1 or Is_Industrial_Deafness = 1
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp9 ON tmp9.[System] = tmp.[System] and tmp9.Agency_Name = tmp.Agency_Name 
-			and tmp9.Sub_Category = tmp.Sub_Category and tmp9.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp9 ON tmp9.[System] = tmp.[System] and tmp9.Value = tmp.Value 
+			and tmp9.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN 
 		(
-			select COUNT(distinct Claim_No) as ncmm_this_week, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as ncmm_this_week, [System], Value, claim_type
 			from claim_all 
 			where NCMM_Actions_This_Week <> '' and NCMM_Complete_Action_Due > '2016-01-11 23:59'
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp10 ON tmp10.[System] = tmp.[System] and tmp10.Agency_Name = tmp.Agency_Name 
-			and tmp10.Sub_Category = tmp.Sub_Category and tmp10.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp10 ON tmp10.[System] = tmp.[System] and tmp10.Value = tmp.Value 
+			and tmp10.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN
 		(
-			select COUNT(distinct Claim_No) as ncmm_next_week, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as ncmm_next_week, [System], Value, claim_type
 			from claim_all 
 			where NCMM_Actions_Next_Week <> ''
 				and NCMM_Prepare_Action_Due BETWEEN DATEADD(week, 1, '2016-01-11 23:59') AND DATEADD(week, 3, '2016-01-11 23:59')
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp11 ON tmp11.[System] = tmp.[System] and tmp11.Agency_Name = tmp.Agency_Name 
-			and tmp11.Sub_Category = tmp.Sub_Category and tmp11.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp11 ON tmp11.[System] = tmp.[System] and tmp11.Value = tmp.Value 
+			and tmp11.claim_type = tmp.Claim_Type
 			
 		LEFT OUTER JOIN
 		(
-			select COUNT(distinct Claim_No) as overall, [System], Agency_Name, Sub_Category, claim_type
+			select COUNT(distinct Claim_No) as overall, [System], Value, claim_type
 			from claim_all
-			group by [System], Agency_Name, Sub_Category, claim_type
-		) tmp12 ON tmp11.[System] = tmp.[System] and tmp12.Agency_Name = tmp.Agency_Name 
-			and tmp12.Sub_Category = tmp.Sub_Category and tmp12.claim_type = tmp.Claim_Type
+			group by [System], Value, claim_type
+		) tmp12 ON tmp11.[System] = tmp.[System] and tmp12.Value = tmp.Value 
+			and tmp12.claim_type = tmp.Claim_Type
 	)
 		
 	SELECT	Value,
+			SubValue,
+			SubSubValue,
 			Claim_Type,
 			[Type] = tmp_port_type.PORT_Type,
 			[Sum] = (select (case when tmp_port_type.PORT_Type = 'ffsd_at_work_15_less'
@@ -283,7 +284,7 @@ AS
 									then tmp_total_2.overall
 							end)
 					from claim_total_summary tmp_total_2
-					where tmp_total_2.[Value] = tmp_total.[Value]
+					where tmp_total_2.Value = tmp_total.Value
 						and tmp_total_2.Claim_Type = tmp_total.Claim_Type)
 	FROM claim_total_summary tmp_total
 	CROSS JOIN (SELECT * from views.claim_getall_porttype_view) tmp_port_type
