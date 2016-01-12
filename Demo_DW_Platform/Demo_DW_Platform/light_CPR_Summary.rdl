@@ -786,7 +786,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value>=CDATE(DATEADD("d",-15,Today) + " 00:00")</Value>
+          <Value>=CDATE(DATEADD(Dateinterval.Year,-3,dateadd("d",-1,Today)) + " 00:00")</Value>
         </Values>
       </DefaultValue>
       <Prompt>Start_Date</Prompt>
@@ -883,7 +883,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value>group</Value>
+          <Value>agency</Value>
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
