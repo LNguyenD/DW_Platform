@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DART">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=10.9.11.13;Initial Catalog=Dart;user id=dart;password=password;</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>d151dc17-f608-49c0-95ac-ac7f91edec11</DataSourceID>
+</RptDataSource>
