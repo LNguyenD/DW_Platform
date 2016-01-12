@@ -16,8 +16,7 @@ AS
 	SELECT	CAST([Value] AS VARCHAR(256)) AS [Value],
 			CAST([SubValue] AS VARCHAR(256)) AS [SubValue],
 			CAST([SubSubValue] AS VARCHAR(256)) AS [SubSubValue],
-			CAST('group' AS VARCHAR(20)) AS [Type], [Start_Date], [End_Date], [System],
-			Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type,
+			[Start_Date], [End_Date], [System], Claim_Liability_Indicator_Group, Is_Stress, Is_Inactive_Claims, Is_Medically_Discharged, Is_Exempt, Is_Reactive, Claim_Type,
 			[Sum] = COUNT(distinct Claim_No)
 	FROM	(
 				/* GROUP -> TEAM -> CLAIM_OFFICER */
