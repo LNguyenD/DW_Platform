@@ -16,6 +16,10 @@
       <Name>DataSet1.rsd</Name>
       <FullPath>DataSet1.rsd</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>Raw_Data.rsd</Name>
+      <FullPath>Raw_Data.rsd</FullPath>
+    </ProjectItem>
   </DataSets>
   <Reports>
     <ProjectItem>
@@ -25,6 +29,10 @@
     <ProjectItem>
       <Name>light_CPR_Summary.rdl</Name>
       <FullPath>light_CPR_Summary.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>light_CPR_Raw_Data.rdl</Name>
+      <FullPath>light_CPR_Raw_Data.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>
