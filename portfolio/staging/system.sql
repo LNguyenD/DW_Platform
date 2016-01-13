@@ -8,5 +8,8 @@ IF SCHEMA_ID('ref') IS NULL
 
 IF SCHEMA_ID('views') IS NULL
   EXECUTE('CREATE SCHEMA views')
+  
+IF SCHEMA_ID('usps') IS NULL
+  EXECUTE('CREATE SCHEMA usps')
 
 GO
