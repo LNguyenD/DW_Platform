@@ -56,6 +56,7 @@ AS
 			'Lauren Christiansen' [Account_Manager],
 			'Other' [Portfolio],
 			'' [Broker_Name],
+			'' [Broker_No],
 			
 			cdr.claim_number [Claim_No],
 			cd.policy_number [Policy_No],
@@ -108,7 +109,7 @@ AS
 			'' [Is_Medically_Discharged],
 			'' [Is_Exempt],
 			'' [Is_Reactive],
-			cd.is_medical_only [Is_Medical_Only],
+			case when cd.is_medical_only = 'Yes' then 1 else 0 end [Is_Medical_Only],
 			'' [Is_D_D],
 			'' [HoursPerWeek],
 			case when itd.nature_of_injury_code in (152,250,312,389,771)

@@ -41,3 +41,5 @@ SET NOCOUNT ON
 :r $(path)\views\claim_portfolio_detail_lastmonth_employer_size_view.sql
 :r $(path)\views\claim_portfolio_detail_lastmonth_account_manager_view.sql
 :r $(path)\views\claim_portfolio_detail_lastmonth_broker_view.sql
+
+:r $(path)\usps\claim_portfolio_detail_usp.sql
