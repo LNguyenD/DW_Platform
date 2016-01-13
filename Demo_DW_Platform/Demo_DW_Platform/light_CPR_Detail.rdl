@@ -358,10 +358,9 @@
                                 </GroupExpressions>
                               </Group>
                               <TablixHeader>
-                                <Size>1.12917cm</Size>
+                                <Size>3.30934cm</Size>
                                 <CellContents>
                                   <Textbox Name="Type3">
-                                    <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
                                       <Paragraph>
@@ -696,7 +695,7 @@
               </SortExpression>
             </SortExpressions>
             <Top>0.25457in</Top>
-            <Height>3.52917cm</Height>
+            <Height>5.70934cm</Height>
             <Width>6.85836cm</Width>
             <ToolTip>="portfolio_detail_" + switch(LCASE(Parameters!Type.Value) = "agency" or LCASE(Parameters!Type.Value) = "portfolio" or LCASE(Parameters!Type.Value) = "employer_size","agency",
 						LCASE(Parameters!Type.Value) = "group","group",
@@ -726,7 +725,7 @@
             </Style>
           </Image>
         </ReportItems>
-        <Height>4.17578cm</Height>
+        <Height>6.35594cm</Height>
         <Style>
           <BackgroundColor>White</BackgroundColor>
         </Style>
