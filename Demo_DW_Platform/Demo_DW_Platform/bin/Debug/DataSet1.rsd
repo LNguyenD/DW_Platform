@@ -2,7 +2,7 @@
 <SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
   <DataSet Name="">
     <Query>
-      <DataSourceReference>DataSource1</DataSourceReference>
+      <DataSourceReference>dw_dev</DataSourceReference>
       <DataSetParameters>
         <DataSetParameter Name="@Value">
           <ReadOnly>false</ReadOnly>
@@ -82,15 +82,15 @@ BEGIN
 					  = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
 					  (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
 	union all
-	SELECT '','','','','','','','','','','','','','New claims',0
+	SELECT '','','','','','','','','','','','','New claims',0
 	union all
-	SELECT '','','','','','','','','','','','','','Open claims',0
+	SELECT '','','','','','','','','','','','','Open claims',0
 	union all
-	SELECT '','','','','','','','','','','','','','Therapy treatment',0
+	SELECT '','','','','','','','','','','','','Therapy treatment',0
 	union all
-	SELECT '','','','','','','','','','','','','','Lump sum intimations',0
+	SELECT '','','','','','','','','','','','','Lump sum intimations',0
 	union all
-	SELECT '','','','','','','','','','','','','','Claim closures',0
+	SELECT '','','','','','','','','','','','','Claim closures',0
                   OPTION (maxrecursion 1100)
 END
 ELSE IF @Type = 'group'
@@ -104,15 +104,15 @@ BEGIN
                   = CASE WHEN @Exempt_From_Reform &lt;&gt; 'all' THEN @Exempt_From_Reform ELSE isnull(Is_Exempt, 0) END) AND (System = @System) AND 
                   (Is_Reactive = CASE WHEN @Reactivation &lt;&gt; 'all' THEN @Reactivation ELSE Is_Reactive END) AND (Start_Date = @Start_Date) AND (End_Date = @End_Date) 
     union all
-	SELECT '','','','','','','','','','','','','','New claims',0
+	SELECT '','','','','','','','','','','','','New claims',0
 	union all
-	SELECT '','','','','','','','','','','','','','Open claims',0
+	SELECT '','','','','','','','','','','','','Open claims',0
 	union all
-	SELECT '','','','','','','','','','','','','','Therapy treatment',0
+	SELECT '','','','','','','','','','','','','Therapy treatment',0
 	union all
-	SELECT '','','','','','','','','','','','','','Lump sum intimations',0
+	SELECT '','','','','','','','','','','','','Lump sum intimations',0
 	union all
-	SELECT '','','','','','','','','','','','','','Claim closures',0
+	SELECT '','','','','','','','','','','','','Claim closures',0
                   OPTION (maxrecursion 1100)
 END
 ELSE IF @Type = 'account_manager'
@@ -169,10 +169,6 @@ END</CommandText>
         <DataField>Value</DataField>
         <rd:TypeName>System.String</rd:TypeName>
       </Field>
-      <Field Name="Type">
-        <DataField>Type</DataField>
-        <rd:TypeName>System.String</rd:TypeName>
-      </Field>
       <Field Name="SubValue">
         <DataField>SubValue</DataField>
         <rd:TypeName>System.String</rd:TypeName>
@@ -191,23 +187,23 @@ END</CommandText>
       </Field>
       <Field Name="Is_Stress">
         <DataField>Is_Stress</DataField>
-        <rd:TypeName>System.Boolean</rd:TypeName>
+        <rd:TypeName>System.Int32</rd:TypeName>
       </Field>
       <Field Name="Is_Inactive_Claims">
         <DataField>Is_Inactive_Claims</DataField>
-        <rd:TypeName>System.Boolean</rd:TypeName>
+        <rd:TypeName>System.Int32</rd:TypeName>
       </Field>
       <Field Name="Is_Medically_Discharged">
         <DataField>Is_Medically_Discharged</DataField>
-        <rd:TypeName>System.Boolean</rd:TypeName>
+        <rd:TypeName>System.String</rd:TypeName>
       </Field>
       <Field Name="Is_Exempt">
         <DataField>Is_Exempt</DataField>
-        <rd:TypeName>System.Boolean</rd:TypeName>
+        <rd:TypeName>System.String</rd:TypeName>
       </Field>
       <Field Name="Is_Reactive">
         <DataField>Is_Reactive</DataField>
-        <rd:TypeName>System.Boolean</rd:TypeName>
+        <rd:TypeName>System.String</rd:TypeName>
       </Field>
       <Field Name="Claim_Type">
         <DataField>Claim_Type</DataField>

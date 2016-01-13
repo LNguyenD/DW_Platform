@@ -7,12 +7,17 @@
       <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>931b2dc0-5273-4834-825e-ac453032e466</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="dw_dev">
+      <DataSourceReference>dw_dev</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>8d55b6a7-fe76-4e7b-8a85-4b20986a6136</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="ds_PORT">
       <Query>
-        <DataSourceName>DART</DataSourceName>
-        <CommandText>="exec usp_CPR_Detail " &amp; 
+        <DataSourceName>dw_dev</DataSourceName>
+        <CommandText>="exec usps.claim_portfolio_detail_usp " &amp; 
 	"'" &amp; LCASE(RTRIM(Parameters!System.Value)) &amp; "'," &amp;
 	"'" &amp; LCASE(RTRIM(Parameters!Type.Value)) &amp; "'," &amp;
 	"'" &amp; iif(LCASE(Parameters!Type.Value) = "broker",LCASE(RTRIM(REPLACE(REPLACE(Parameters!Value.Value,"@@@"," &amp; "),"'", "''''"))),RTRIM(REPLACE(Parameters!Value.Value,"'", "''''"))) &amp; "'," &amp;
@@ -25,8 +30,7 @@
 	"'" &amp; LCASE(RTRIM(Parameters!Inactive_Claims.Value)) &amp; "'," &amp;
 	"'" &amp; LCASE(RTRIM(Parameters!Medically_Discharged.Value)) &amp; "'," &amp;
 	"'" &amp; LCASE(RTRIM(Parameters!Exempt_From_Reform.Value)) &amp; "'," &amp;
-	"'" &amp; LCASE(RTRIM(Parameters!Reactivation.Value)) &amp;	"'," &amp;
-	"'" &amp; LCASE(RTRIM(Parameters!View_Type.Value)) &amp;	"'"</CommandText>
+	"'" &amp; LCASE(RTRIM(Parameters!Reactivation.Value)) &amp;	"'"</CommandText>
       </Query>
       <Fields>
         <Field Name="Value">
@@ -194,7 +198,13 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6", "Transparent")</BackgroundColor>
+                            <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
+	 or LCASE(Fields!Claim_Type.Value) = "open claims"
+	 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
+	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
+	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
+	 or isnothing(Fields!Claim_Type.Value)
+	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,"Transparent","#edf2f6"))</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -356,6 +366,15 @@
                                 <GroupExpressions>
                                   <GroupExpression>=Fields!Type.Value</GroupExpression>
                                 </GroupExpressions>
+                                <Filters>
+                                  <Filter>
+                                    <FilterExpression>=iif(Fields!Type.Value &lt;&gt; "","X","Z")</FilterExpression>
+                                    <Operator>Equal</Operator>
+                                    <FilterValues>
+                                      <FilterValue>="X"</FilterValue>
+                                    </FilterValues>
+                                  </Filter>
+                                </Filters>
                               </Group>
                               <TablixHeader>
                                 <Size>3.30934cm</Size>
@@ -511,7 +530,12 @@
 			Fields!Parent_Claim_Type.Value = "Claim closures","Claim closures"
 			))</Value>
                                 <Style>
-                                  <FontSize>9pt</FontSize>
+                                  <FontSize>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
+	 or LCASE(Fields!Claim_Type.Value) = "open claims"
+	 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
+	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
+	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
+	 ,"11pt","9pt")</FontSize>
                                   <FontWeight>Bold</FontWeight>
                                   <Color>#037baf</Color>
                                 </Style>
@@ -535,7 +559,13 @@
 		 or LCASE(Fields!Claim_Type.Value) = "claim closures"
 		 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,  "#edf2f6","white")))</Color>
                           </RightBorder>
-                          <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6", "Transparent")</BackgroundColor>
+                          <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
+	 or LCASE(Fields!Claim_Type.Value) = "open claims"
+	 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
+	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
+	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
+	 or isnothing(Fields!Claim_Type.Value)
+	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,"Transparent","#edf2f6"))</BackgroundColor>
                           <VerticalAlign>Middle</VerticalAlign>
                           <PaddingLeft>2pt</PaddingLeft>
                           <PaddingRight>2pt</PaddingRight>
@@ -601,36 +631,14 @@
                           <TablixHeader>
                             <Size>2.92647cm</Size>
                             <CellContents>
-                              <Textbox Name="Claim_Type2">
+                              <Textbox Name="Claim_Type">
                                 <CanGrow>true</CanGrow>
                                 <KeepTogether>true</KeepTogether>
                                 <Paragraphs>
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
-                                        <Value>=iif(Fields!Claim_Type.Value=Fields!Parent_Claim_Type.Value,"",
-	 switch(Fields!Claim_Type.Value = "claim_open_0_13","0 - 13 weeks",
-		Fields!Claim_Type.Value = "claim_open_13_26","13 - 26 weeks",
-		Fields!Claim_Type.Value = "claim_open_26_52","26 - 52 weeks",
-		Fields!Claim_Type.Value = "claim_open_52_78","52 - 78 weeks",
-		Fields!Claim_Type.Value = "claim_open_0_78","SubTotal 0-78",
-		Fields!Claim_Type.Value = "claim_open_78_130","78 - 130 weeks",
-		Fields!Claim_Type.Value = "claim_open_gt_130","&gt; 130 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_05","&lt; 5 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_013","&lt; 13 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_26","&lt; 26 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_52","&lt; 52 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_78","&lt; 78 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_104","&lt; 104 weeks",
-		Fields!Claim_Type.Value = "claim_open_lt_130","&lt; 130 weeks",
-		Fields!Claim_Type.Value = "claim_open_ge_130","&gt;= 130 weeks",
-		Fields!Claim_Type.Value = "claim_open_wpi_all","All",
-		Fields!Claim_Type.Value = "claim_open_wpi_0_10","0 - 10%",
-		Fields!Claim_Type.Value = "claim_open_wpi_11_14","11 - 14%",
-		Fields!Claim_Type.Value = "claim_open_wpi_15_20","15 - 20%",
-		Fields!Claim_Type.Value = "claim_open_wpi_21_30","21 - 30%",
-		Fields!Claim_Type.Value = "claim_open_wpi_31_more","&gt;= 31%")
-	 )</Value>
+                                        <Value>=Fields!Claim_Type.Value</Value>
                                         <Style>
                                           <FontSize>9pt</FontSize>
                                           <FontWeight>Bold</FontWeight>
@@ -641,13 +649,19 @@
                                     <Style />
                                   </Paragraph>
                                 </Paragraphs>
-                                <rd:DefaultName>Claim_Type2</rd:DefaultName>
+                                <rd:DefaultName>Claim_Type</rd:DefaultName>
                                 <Style>
                                   <Border>
                                     <Color>LightGrey</Color>
                                     <Style>Solid</Style>
                                   </Border>
-                                  <BackgroundColor>=IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2, "#edf2f6", "Transparent")</BackgroundColor>
+                                  <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
+	 or LCASE(Fields!Claim_Type.Value) = "open claims"
+	 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
+	 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
+	 or LCASE(Fields!Claim_Type.Value) = "claim closures"
+	 or isnothing(Fields!Claim_Type.Value)
+	 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,"Transparent","#edf2f6"))</BackgroundColor>
                                   <VerticalAlign>Middle</VerticalAlign>
                                   <PaddingLeft>2pt</PaddingLeft>
                                   <PaddingRight>2pt</PaddingRight>

@@ -7,8 +7,8 @@
       <FullPath>DART.rds</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>DataSource1.rds</Name>
-      <FullPath>DataSource1.rds</FullPath>
+      <Name>dw_dev.rds</Name>
+      <FullPath>dw_dev.rds</FullPath>
     </ProjectItem>
   </DataSources>
   <DataSets>
