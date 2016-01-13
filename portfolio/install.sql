@@ -19,6 +19,8 @@ SET NOCOUNT ON
 :r $(path)\reference\pol_agency_sub_category_mapping_reference.sql
 :r $(path)\reference\public_hols_reference.sql
 
+:r $(path)\views\claim_getall_claimtype_view.sql
+:r $(path)\views\claim_getall_porttype_view.sql
 :r $(path)\views\claim_portfolio_view.sql
 :r $(path)\views\claim_portfolio_summary_bymode_agency_view.sql
 :r $(path)\views\claim_portfolio_summary_bymode_group_view.sql
@@ -33,9 +35,9 @@ SET NOCOUNT ON
 :r $(path)\views\claim_portfolio_summary_account_manager_view.sql
 :r $(path)\views\claim_portfolio_summary_broker_view.sql
 
-:r $(path)\views\claim_portfolio_detail_agency_view.sql
-:r $(path)\views\claim_portfolio_detail_group_view.sql
-:r $(path)\views\claim_portfolio_detail_portfolio_view.sql
-:r $(path)\views\claim_portfolio_detail_employer_size_view.sql
-:r $(path)\views\claim_portfolio_detail_account_manager_view.sql
-:r $(path)\views\claim_portfolio_detail_broker_view.sql
+:r $(path)\views\claim_portfolio_detail_lastmonth_agency_view.sql
+:r $(path)\views\claim_portfolio_detail_lastmonth_group_view.sql
+:r $(path)\views\claim_portfolio_detail_lastmonth_portfolio_view.sql
+:r $(path)\views\claim_portfolio_detail_lastmonth_employer_size_view.sql
+:r $(path)\views\claim_portfolio_detail_lastmonth_account_manager_view.sql
+:r $(path)\views\claim_portfolio_detail_lastmonth_broker_view.sql
