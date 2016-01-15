@@ -1,0 +1,9 @@
+/* Schemas */
+
+IF SCHEMA_ID('udfs') IS NULL
+  EXECUTE('CREATE SCHEMA udfs')
+
+IF SCHEMA_ID('views') IS NULL
+  EXECUTE('CREATE SCHEMA views')
+
+GO

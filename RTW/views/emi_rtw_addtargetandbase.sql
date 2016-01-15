@@ -1,7 +1,7 @@
-IF OBJECT_ID('views.dashboard_emi_rtw_addtargetandbase_view') IS NOT NULL
-	DROP VIEW views.dashboard_emi_rtw_addtargetandbase_view
+IF OBJECT_ID('views.emi_rtw_addtargetandbase') IS NOT NULL
+	DROP VIEW views.emi_rtw_addtargetandbase
 GO
-CREATE VIEW views.dashboard_emi_rtw_addtargetandbase_view
+CREATE VIEW views.emi_rtw_addtargetandbase
 AS		
 	-- EML --
 	SELECT [Type] = ''

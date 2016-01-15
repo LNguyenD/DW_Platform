@@ -1,7 +1,7 @@
-IF OBJECT_ID('views.dashboard_hem_rtw_addtargetandbase_view') IS NOT NULL
-	DROP VIEW views.dashboard_hem_rtw_addtargetandbase_view
+IF OBJECT_ID('views.hem_rtw_addtargetandbase') IS NOT NULL
+	DROP VIEW views.hem_rtw_addtargetandbase
 GO
-CREATE VIEW views.dashboard_hem_rtw_addtargetandbase_view
+CREATE VIEW views.hem_rtw_addtargetandbase
 AS
 	-- HEM --
 	SELECT [Type] = ''

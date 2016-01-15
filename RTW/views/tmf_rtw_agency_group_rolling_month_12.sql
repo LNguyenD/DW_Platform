@@ -1,7 +1,7 @@
-IF OBJECT_ID('views.tmf_rtw_agency_group_rolling_month_12_view') IS NOT NULL
-	DROP VIEW views.tmf_rtw_agency_group_rolling_month_12_view
+IF OBJECT_ID('views.tmf_rtw_agency_group_rolling_month_12') IS NOT NULL
+	DROP VIEW views.tmf_rtw_agency_group_rolling_month_12
 GO
-CREATE VIEW views.tmf_rtw_agency_group_rolling_month_12_view
+CREATE VIEW views.tmf_rtw_agency_group_rolling_month_12
 AS
 	SELECT    Agency_Group = rtrim(isnull(sub.[Group],'Miscellaneous'))
 			  ,[Type] = 'group'
@@ -14,8 +14,8 @@ AS
 			  ,LT = SUM(uv.LT)
 			  ,WGT = SUM(uv.WGT)
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
-			  ,[Target] = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'target','group',rtrim(isnull(sub.[Group],'Miscellaneous')),NULL,uv.Measure)									
-			  ,Base = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'base','group',rtrim(isnull(sub.[Group],'Miscellaneous')),NULL,uv.Measure)
+			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','group',rtrim(isnull(sub.[Group],'Miscellaneous')),NULL,uv.Measure)									
+			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','group',rtrim(isnull(sub.[Group],'Miscellaneous')),NULL,uv.Measure)
 							
 	FROM      views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 
@@ -37,8 +37,8 @@ AS
 			  ,LT = SUM(uv.LT)
 			  ,WGT = SUM(uv.WGT)
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
-			  ,[Target] = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'target','agency',rtrim(isnull(sub.agency_name,'Miscellaneous')),NULL,uv.Measure)									
-			  ,Base = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'base','agency',rtrim(isnull(sub.agency_name,'Miscellaneous')),NULL,uv.Measure)					 
+			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','agency',rtrim(isnull(sub.agency_name,'Miscellaneous')),NULL,uv.Measure)									
+			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','agency',rtrim(isnull(sub.agency_name,'Miscellaneous')),NULL,uv.Measure)					 
 	FROM         views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
 				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
@@ -58,8 +58,8 @@ AS
 			  ,LT = SUM(uv.LT)
 			  ,WGT = SUM(uv.WGT)
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
-			  ,[Target] = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'target','agency','POLICE & EMERGENCY SERVICES',NULL,uv.Measure)
-			  ,Base = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'base','agency','POLICE & EMERGENCY SERVICES',NULL,uv.Measure)
+			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','agency','POLICE & EMERGENCY SERVICES',NULL,uv.Measure)
+			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','agency','POLICE & EMERGENCY SERVICES',NULL,uv.Measure)
 	FROM         views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
 				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
@@ -80,8 +80,8 @@ AS
 			  ,LT = SUM(uv.LT)
 			  ,WGT = SUM(uv.WGT)
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
-			  ,[Target] = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'target','agency','Health & Other',NULL,uv.Measure)									
-			  ,Base = udfs.dashboard_tmf_rtw_gettargetandbase_udf(uv.Remuneration_End,'base','agency','Health & Other',NULL,uv.Measure)					 
+			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','agency','Health & Other',NULL,uv.Measure)									
+			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','agency','Health & Other',NULL,uv.Measure)					 
 	FROM         views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
 				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
@@ -99,8 +99,8 @@ AS
 				,LT= SUM(t.LT)
 				,WGT= SUM(t.WGT)
 				,AVGDURN= SUM(LT) / nullif(SUM(WGT),0)
-				,[Target] = udfs.dashboard_tmf_rtw_gettargetandbase_udf(t.Remuneration_End,'target','group','TMF',NULL,t.Measure)
-				,Base = udfs.dashboard_tmf_rtw_gettargetandbase_udf(t.Remuneration_End,'base','group','TMF',NULL,t.Measure)
+				,[Target] = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End,'target','group','TMF',NULL,t.Measure)
+				,Base = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End,'base','group','TMF',NULL,t.Measure)
 
 	FROM         views.RTW_view t 
 	inner join (SELECT     dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)) - 23, 0))) + '23:59' AS Remuneration_End
@@ -121,8 +121,8 @@ AS
 				,LT = SUM(t.LT)  
 				,WGT =SUM(t.WGT)  
 				,AVGDURN =SUM(LT) / nullif(SUM(WGT),0) 			
-				,[Target] = udfs.dashboard_tmf_rtw_gettargetandbase_udf(t.Remuneration_End, 'target','agency','TMF',NULL,t.Measure)
-				,Base = udfs.dashboard_tmf_rtw_gettargetandbase_udf(t.Remuneration_End,'base','agency','TMF',NULL,t.Measure)
+				,[Target] = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End, 'target','agency','TMF',NULL,t.Measure)
+				,Base = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End,'base','agency','TMF',NULL,t.Measure)
 
 	FROM         views.RTW_view t inner join (SELECT     dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)) - 23, 0))) + '23:59' AS Remuneration_End
 						   FROM          master.dbo.spt_values

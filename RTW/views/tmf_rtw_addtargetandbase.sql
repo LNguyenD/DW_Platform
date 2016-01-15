@@ -1,7 +1,7 @@
-IF OBJECT_ID('views.dashboard_tmf_rtw_addtargetandbase_view') IS NOT NULL
-	DROP VIEW views.dashboard_tmf_rtw_addtargetandbase_view
+IF OBJECT_ID('views.tmf_rtw_addtargetandbase') IS NOT NULL
+	DROP VIEW views.tmf_rtw_addtargetandbase
 GO
-CREATE VIEW views.dashboard_tmf_rtw_addtargetandbase_view
+CREATE VIEW views.tmf_rtw_addtargetandbase
 AS
 	--TMF--
 	SELECT [Type] = ''

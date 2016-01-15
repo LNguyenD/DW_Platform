@@ -1,7 +1,8 @@
-
-
-CREATE function udfs.tmf_rtw_agency_group_compares_to_same_time_last_year_current_add_missing_group_udf()
-RETURNS TABLE 
+IF OBJECT_ID('udfs.tmf_rtw_agency_group_compares_to_same_time_last_year_current_add_missing_group') IS NOT NULL
+	DROP FUNCTION udfs.tmf_rtw_agency_group_compares_to_same_time_last_year_current_add_missing_group
+GO
+CREATE function udfs.tmf_rtw_agency_group_compares_to_same_time_last_year_current_add_missing_group()
+	RETURNS TABLE
 AS
 RETURN 
 (	
@@ -85,8 +86,4 @@ RETURN
 	   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)    
 	) as tmp3
 )
-
-
 GO
-
-
