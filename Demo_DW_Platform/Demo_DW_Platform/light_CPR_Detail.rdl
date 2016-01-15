@@ -176,7 +176,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Microsoft.VisualBasic.Interaction.iif(Fields!Sum.Value = 0, "-", Fields!Sum.Value)</Value>
+                                  <Value>=iif(isnothing(Fields!Claim_Type.Value),"",iif(Fields!Sum.Value = 0, "-", sum(Fields!Sum.Value)))</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -557,7 +557,7 @@
 		 or LCASE(Fields!Claim_Type.Value) = "therapy treatment" 
 		 or LCASE(Fields!Claim_Type.Value) = "lump sum intimations"
 		 or LCASE(Fields!Claim_Type.Value) = "claim closures"
-		 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,  "#edf2f6","white")))</Color>
+		 ,"Gainsboro",IIF(RunningValue(Fields!Claim_Type.Value, CountDistinct, nothing) Mod 2,"white","#edf2f6")))</Color>
                           </RightBorder>
                           <BackgroundColor>=iif(LCASE(Fields!Claim_Type.Value) = "new claims" 
 	 or LCASE(Fields!Claim_Type.Value) = "open claims"
@@ -638,7 +638,29 @@
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
-                                        <Value>=Fields!Claim_Type.Value</Value>
+                                        <Value>=iif(Fields!Claim_Type.Value=Fields!Parent_Claim_Type.Value,"",
+	 switch(Fields!Claim_Type.Value = "claim_open_0_13","0 - 13 weeks",
+		Fields!Claim_Type.Value = "claim_open_13_26","13 - 26 weeks",
+		Fields!Claim_Type.Value = "claim_open_26_52","26 - 52 weeks",
+		Fields!Claim_Type.Value = "claim_open_52_78","52 - 78 weeks",
+		Fields!Claim_Type.Value = "claim_open_0_78","SubTotal 0-78",
+		Fields!Claim_Type.Value = "claim_open_78_130","78 - 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_gt_130","&gt; 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_05","&lt; 5 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_013","&lt; 13 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_26","&lt; 26 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_52","&lt; 52 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_78","&lt; 78 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_104","&lt; 104 weeks",
+		Fields!Claim_Type.Value = "claim_open_lt_130","&lt; 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_ge_130","&gt;= 130 weeks",
+		Fields!Claim_Type.Value = "claim_open_wpi_all","All",
+		Fields!Claim_Type.Value = "claim_open_wpi_0_10","0 - 10%",
+		Fields!Claim_Type.Value = "claim_open_wpi_11_14","11 - 14%",
+		Fields!Claim_Type.Value = "claim_open_wpi_15_20","15 - 20%",
+		Fields!Claim_Type.Value = "claim_open_wpi_21_30","21 - 30%",
+		Fields!Claim_Type.Value = "claim_open_wpi_31_more","&gt;= 31%")
+	 )</Value>
                                         <Style>
                                           <FontSize>9pt</FontSize>
                                           <FontWeight>Bold</FontWeight>
@@ -739,7 +761,7 @@
             </Style>
           </Image>
         </ReportItems>
-        <Height>6.35594cm</Height>
+        <Height>6.35595cm</Height>
         <Style>
           <BackgroundColor>White</BackgroundColor>
         </Style>
