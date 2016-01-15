@@ -1,14 +1,7 @@
-USE [dw_dev]
+IF OBJECT_ID('views.dashboard_emi_rtw_addtargetandbase_view') IS NOT NULL
+	DROP VIEW views.dashboard_emi_rtw_addtargetandbase_view
 GO
-
-/****** Object:  View [views].[usp_dashboard_emi_rtw_addtargetandbase_view]    Script Date: 01/13/2016 14:47:07 ******/
-IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[views].[dashboard_emi_rtw_addtargetandbase_view]'))
-DROP VIEW [views].[dashboard_emi_rtw_addtargetandbase_view]
-GO
-
-
-CREATE VIEW [views].[dashboard_emi_rtw_addtargetandbase_view]
-
+CREATE VIEW views.dashboard_emi_rtw_addtargetandbase_view
 AS		
 	-- EML --
 	SELECT [Type] = ''
@@ -272,5 +265,3 @@ AS
 		union select 104 as Measure	) as t3) as tmp
 
 GO
-
-

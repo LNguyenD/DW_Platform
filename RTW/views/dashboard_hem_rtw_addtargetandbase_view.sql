@@ -1,7 +1,8 @@
+IF OBJECT_ID('views.dashboard_hem_rtw_addtargetandbase_view') IS NOT NULL
+	DROP VIEW views.dashboard_hem_rtw_addtargetandbase_view
+GO
 CREATE VIEW views.dashboard_hem_rtw_addtargetandbase_view
-
 AS
-	
 	-- HEM --
 	SELECT [Type] = ''
 		   ,[Value] = 'Hospitality'

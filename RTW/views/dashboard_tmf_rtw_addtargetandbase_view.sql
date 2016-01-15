@@ -1,8 +1,8 @@
+IF OBJECT_ID('views.dashboard_tmf_rtw_addtargetandbase_view') IS NOT NULL
+	DROP VIEW views.dashboard_tmf_rtw_addtargetandbase_view
+GO
 CREATE VIEW views.dashboard_tmf_rtw_addtargetandbase_view
-
 AS
-
-	
 	--TMF--
 	SELECT [Type] = ''
 		   ,[Value] = 'TMF'
@@ -306,5 +306,4 @@ AS
 		union select 52 as Measure
 		union select 78 as Measure
 		union select 104 as Measure	) as t3) as tmp
-
 GO

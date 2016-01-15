@@ -1,13 +1,7 @@
-USE [dw_dev]
+IF OBJECT_ID('views.tmf_rtw_agency_group_compares_to_same_time_last_year_current_view') IS NOT NULL
+	DROP VIEW views.tmf_rtw_agency_group_compares_to_same_time_last_year_current_view
 GO
-
-/****** Object:  View [views].[TMF_RTW_Agency_Group_Compares_To_Same_Time_Last_Year_Current_View]    Script Date: 01/13/2016 14:45:03 ******/
-IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[views].[tmf_rtw_agency_group_compares_to_same_time_last_year_current_view]'))
-DROP VIEW [views].[tmf_rtw_agency_group_compares_to_same_time_last_year_current_view]
-GO
-
-
-CREATE VIEW views.[tmf_rtw_agency_group_compares_to_same_time_last_year_current_view] 
+CREATE VIEW views.tmf_rtw_agency_group_compares_to_same_time_last_year_current_view
 AS
 	--Agency---	
 	select Month_period=case when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 0
@@ -166,7 +160,4 @@ AS
 																					  end
 							and CHARINDEX(case when RTRIM(Agency_Group) = 'TMF' then 'TMF' else RTRIM(sub.agency_name) end, RTRIM(Agency_Group),0) > 0
 							)
-
 GO
-
-

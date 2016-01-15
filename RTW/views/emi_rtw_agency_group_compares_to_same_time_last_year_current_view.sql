@@ -1,12 +1,7 @@
-USE [dw_dev]
+IF OBJECT_ID('views.emi_rtw_agency_group_compares_to_same_time_last_year_current_view') IS NOT NULL
+	DROP VIEW views.emi_rtw_agency_group_compares_to_same_time_last_year_current_view
 GO
-
-/****** Object:  View [views].[EML_RTW_Agency_Group_Compares_To_Same_Time_Last_Year_Current_View]    Script Date: 01/13/2016 14:40:58 ******/
-IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[views].[emi_rtw_agency_group_compares_to_same_time_last_year_current_view]'))
-DROP VIEW [views].[emi_rtw_agency_group_compares_to_same_time_last_year_current_view]
-GO
-
-CREATE VIEW views.[emi_rtw_agency_group_compares_to_same_time_last_year_current_view] 
+CREATE VIEW views.emi_rtw_agency_group_compares_to_same_time_last_year_current_view
 AS
 	WITH temp AS 
 	(
@@ -233,8 +228,5 @@ AS
 									 when [Type] = 'employer_size' then (case when EmployerSize_Group <> 'WCNSW' then rtrim(uv.EMPL_SIZE) else 'WCNSW' end)
 									 when [Type] = 'account_manager' then (case when EmployerSize_Group <> 'WCNSW' then rtrim(uv.Account_Manager) else 'WCNSW' end)
 								end
-									 = EmployerSize_Group )
-
+									 = EmployerSize_Group)
 GO
-
-
