@@ -91,7 +91,9 @@ AS
 														then rtw.[Grouping]
 													else rtw.[System]
 												end),
-			Remuneration
+			Remuneration = CAST(YEAR(rem.Remuneration) AS varchar) + 'M'
+							+ case when MONTH(rem.Remuneration) <= 9 then '0' else '' end
+							+ CAST(MONTH(rem.Remuneration) AS varchar)
 	from values_by_type val
 	cross join measure_types m
 	cross join remunerations rem

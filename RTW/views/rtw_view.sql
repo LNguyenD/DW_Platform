@@ -4,28 +4,22 @@ GO
 CREATE VIEW views.rtw_view
 AS
 	SELECT TOP 3000
-		'2014-12-01' [Remuneration_Start],
-		'2014-12-31 23:59' [Remuneration_End],
+		CAST('2014-01-01' AS datetime) [Remuneration_Start],
+		CAST('2014-12-31 23:59' AS datetime) [Remuneration_End],
 		cdr.source_system_code [System],
 		3 [Measure_months],
 		COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
 		COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
-		case when cdr.source_system_code = 'EMI'
-				then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			when cdr.source_system_code = 'TMF'
-				then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			when cdr.source_system_code = 'HEM'
-				then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-		end [Group],
+		udfs.getgroup_byteam_udf(cdr.source_system_code, COALESCE(std.team,'Miscellaneous')) [Group],
 		COALESCE(std.team,'Miscellaneous') [Team],
 		'C - Medium' [EMPL_SIZE],
 		'Lauren Christiansen' [Account_Manager],
 		'Other' [Portfolio],
-		[Grouping] = case when rtrim(isnull(asm.agency_name,'Miscellaneous')) in ('Health', 'Other')
+		[Grouping] = case when COALESCE(asm.agency_name,'Miscellaneous') in ('Health', 'Other')
 							then 'Health & Other'
-						when rtrim(isnull(asm.agency_name,'Miscellaneous')) in ('Police', 'Fire', 'RFS')
+						when COALESCE(asm.agency_name,'Miscellaneous') in ('Police', 'Fire', 'RFS')
 							then 'Police & Fire & RFS'
-						when RTRIM('Other') in ('Accommodation', 'Pubs, Taverns and Bars')
+						when 'Other' in ('Accommodation', 'Pubs, Taverns and Bars')
 							then 'Hotel'
 						else ''
 					end,
@@ -39,7 +33,7 @@ AS
 		13 [Measure],
 		wf.fitness_code_description [Cert_Type],
 		sd_date.date [Med_cert_From],
-		sd_date.date [Med_cert_To],
+		ed_date.date [Med_cert_To],
 		'' [Cell_no],
 		Stress = case when imd.mechanism_of_incident_code in (81,82,84,85,86,87,88)
 						or itd.nature_of_injury_code in (910,702,703,704,705,706,707,718,719) then 'Y'

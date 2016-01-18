@@ -36,13 +36,7 @@ AS
 			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
 			
 			--COALESCE(std.team,'Miscellaneous') [Team],
-			--case when cdr.source_system_code = 'EMI'
-			--		then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			--	when cdr.source_system_code = 'TMF'
-			--		then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			--	when cdr.source_system_code = 'HEM'
-			--		then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
-			--end [Group],
+			--udfs.getgroup_byteam_udf(cdr.source_system_code, COALESCE(std.team,'Miscellaneous')) [Group],
 			--std.given_names + ', ' + std.surname [Claims_Officer_Name],
 			--'' [EMPL_SIZE],
 			--'' [Account_Manager],
