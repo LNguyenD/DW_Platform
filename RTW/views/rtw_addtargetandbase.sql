@@ -47,7 +47,18 @@ AS
 							where rtw.Measure = m.Measure
 								AND Remuneration_End = cast(year(DATEADD(mm,-3,rem.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 								AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11 
-								AND rtw.[System] = val.[System]),
+								AND rtw.[System] = val.[System]
+								AND val.Value = case when val.[Type] = 'agency'
+														then rtrim(rtw.Agency_Name)
+													when val.[Type] = 'group'
+														then rtrim(rtw.[Group])
+													when val.[Type] = 'portfolio'
+														then rtrim(rtw.Portfolio)
+													when val.[Type] = 'employer_size'
+														then rtrim(rtw.EMPL_SIZE)
+													when val.[Type] = 'account_manager'
+														then rtrim(rtw.Account_Manager)
+												end),
 			[Base] = (select ISNULL(SUM(LT) / NULLIF(SUM(WGT),0),0)
 								* POWER(CAST(0.9 as float),
 									(CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,rem.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,rem.Remuneration))) as float)/18))*1.15
@@ -55,7 +66,18 @@ AS
 						where rtw.Measure = m.Measure
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,rem.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11
-							AND rtw.[System] = val.[System]),
+							AND rtw.[System] = val.[System]
+							AND val.Value = case when val.[Type] = 'agency'
+														then rtrim(rtw.Agency_Name)
+													when val.[Type] = 'group'
+														then rtrim(rtw.[Group])
+													when val.[Type] = 'portfolio'
+														then rtrim(rtw.Portfolio)
+													when val.[Type] = 'employer_size'
+														then rtrim(rtw.EMPL_SIZE)
+													when val.[Type] = 'account_manager'
+														then rtrim(rtw.Account_Manager)
+												end),
 			Remuneration
 	from values_by_type val
 	cross join measure_types m
