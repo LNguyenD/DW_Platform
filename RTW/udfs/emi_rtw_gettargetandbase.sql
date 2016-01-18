@@ -11,7 +11,7 @@ BEGIN
 	FROM views.[emi_rtw_addtargetandbase] tb 
 	WHERE 
 	(([Type] = @type AND [Value] = @value)
-	OR ([Value] = @value AND @value = 'eml'))
+	OR ([Value] = @value AND @value = 'emi'))
 	AND ISNULL([Sub_Value], '') = ISNULL(@sub_value, '')
 	AND [Measure] = @measure and Remuneration= (cast(year(@rem_end) AS varchar) 
                       + 'M' + CASE WHEN MONTH(@rem_end) <= 9 THEN '0' ELSE '' END 
@@ -21,7 +21,7 @@ BEGIN
 	BEGIN		
 		SELECT @target = min(tb.[Target]), @base = min(tb.[base])
 		FROM views.[emi_rtw_addtargetandbase] tb 
-		WHERE [Value] = 'eml'		
+		WHERE [Value] = 'emi'		
 		AND [Measure] = @measure and Remuneration= (cast(year(@rem_end) AS varchar) 
                       + 'M' + CASE WHEN MONTH(@rem_end) <= 9 THEN '0' ELSE '' END 
                       + cast(month(@rem_end) AS varchar))						

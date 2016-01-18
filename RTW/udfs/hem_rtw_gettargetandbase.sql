@@ -11,7 +11,7 @@ BEGIN
 		   ,@base = min(isnull(tb.[base], 0))
 		   ,@count = count(*)
 	FROM views.hem_rtw_addtargetandbase tb 
-	WHERE (([Type] = @type AND [Value] = @value) OR ([Value] = @value AND @value = 'Hospitality'))
+	WHERE (([Type] = @type AND [Value] = @value) OR ([Value] = @value AND @value = 'HEM'))
 		   AND ISNULL([Sub_Value], '') = ISNULL(@sub_value, '')
 			AND [Measure] = @measure and Remuneration= (cast(year(@rem_end) AS varchar) 
                       + 'M' + CASE WHEN MONTH(@rem_end) <= 9 THEN '0' ELSE '' END 
@@ -21,7 +21,7 @@ BEGIN
 	BEGIN		
 		SELECT @target = min(tb.[Target]), @base = min(tb.[base])
 		FROM views.hem_rtw_addtargetandbase tb 
-		WHERE [Value] = 'Hospitality'
+		WHERE [Value] = 'HEM'
 		AND [Measure] = @measure and Remuneration= (cast(year(@rem_end) AS varchar) 
                       + 'M' + CASE WHEN MONTH(@rem_end) <= 9 THEN '0' ELSE '' END 
                       + cast(month(@rem_end) AS varchar))

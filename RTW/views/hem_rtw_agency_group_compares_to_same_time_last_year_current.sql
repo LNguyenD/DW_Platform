@@ -26,47 +26,47 @@ AS
 			select 104 as Measure_months) as measure_months		
 			cross join
 			(
-			select distinct 'Hospitality' as EmployerSize_Group,[Type]='portfolio'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			select distinct 'HEM' as EmployerSize_Group,[Type]='portfolio'
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 			   
 			union
 			select distinct rtrim(Portfolio) as EmployerSize_Group, [Type]='portfolio'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				and rtrim(Portfolio) IS NOT NULL
 				
 			union
-			select distinct 'Hospitality' as EmployerSize_Group, [Type]='group'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			select distinct 'HEM' as EmployerSize_Group, [Type]='group'
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				
 			union
 			select distinct udfs.hem_getgroup_byteam_udf(Team) as EmployerSize_Group, [Type]='group'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				
 			union
-			select distinct 'Hospitality' as EmployerSize_Group, [Type]='account_manager'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			select distinct 'HEM' as EmployerSize_Group, [Type]='account_manager'
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				
 			union
 			select distinct rtrim([Account_Manager]) as EmployerSize_Group, [Type]='account_manager'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				and rtrim([Account_Manager]) is not null
 				
 			union
 			select distinct 'Hotel' as EmployerSize_Group, [Type]='portfolio'
-			from views.RTW_view uv 
-			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			from views.rtw_view uv 
+			where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				and rtrim(Portfolio) IS NOT NULL	
 				
@@ -84,13 +84,13 @@ AS
 							then 12
 					end
 			,[Type]='portfolio'
-			,'Hospitality' as EmployerSize_Group
+			,'HEM' as EmployerSize_Group
 			,Measure as Measure_months
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN 
-			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','','Hospitality',NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','','HEM',NULL,Measure),0)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 
 	group by Measure,Remuneration_Start, Remuneration_End
@@ -111,8 +111,8 @@ AS
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN 
 			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','portfolio',rtrim(Portfolio),NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11) and rtrim(Portfolio) IS NOT NULL
 
 	group by Portfolio,Measure,Remuneration_Start, Remuneration_End
@@ -134,8 +134,8 @@ AS
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN 
 			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','portfolio','Hotel',NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11) and rtrim(Portfolio) IS NOT NULL
 		   and RTRIM(Portfolio) in ('Accommodation','Pubs, Taverns and Bars')
 
@@ -154,13 +154,13 @@ AS
 							then 12
 					end
 			,[Type]='group'
-			,'Hospitality' as EmployerSize_Group
+			,'HEM' as EmployerSize_Group
 			,Measure as Measure_months
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN
-			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','','Hospitality',NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','','HEM',NULL,Measure),0)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 
 	group by Measure,Remuneration_Start, Remuneration_End
@@ -181,8 +181,8 @@ AS
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN 
 			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','group',udfs.hem_getgroup_byteam_udf(Team),NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 
 	group by udfs.hem_getgroup_byteam_udf(Team),Measure,Remuneration_Start, Remuneration_End
@@ -200,13 +200,13 @@ AS
 							then 12
 					end
 			,[Type]='account_manager'
-			,'Hospitality' as EmployerSize_Group
+			,'HEM' as EmployerSize_Group
 			,Measure as Measure_months
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN
-			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','','Hospitality',NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','','HEM',NULL,Measure),0)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 
 	group by Measure,Remuneration_Start, Remuneration_End
@@ -227,8 +227,8 @@ AS
 			,sum(LT) as LT,sum(WGT) as WGT
 			,sum(LT)/nullif(sum(WGT),0) as AVGDURN 
 			,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.hem_rtw_gettargetandbase(Remuneration_End,'target','account_manager',rtrim([Account_Manager]),NULL,Measure),0)
-	from views.RTW_view uv
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 		   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 		   and rtrim([Account_Manager]) is not null
 
@@ -253,18 +253,18 @@ AS
 		  ,AVGDURN = 0
 		  ,[Target] = 0
 	from temp as tmp
-	where Measure_months not in (select distinct Measure from views.RTW_view uv
-							where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	where Measure_months not in (select distinct Measure from views.rtw_view uv
+							where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 							and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) = tmp.month_period
-							and case when [Type] = 'group' then (case when EmployerSize_Group <> 'Hospitality' then udfs.hem_getgroup_byteam_udf(rtrim(uv.Team)) else 'Hospitality' end)
-									 when [Type] = 'portfolio' then (case when EmployerSize_Group <> 'Hospitality' 
+							and case when [Type] = 'group' then (case when EmployerSize_Group <> 'HEM' then udfs.hem_getgroup_byteam_udf(rtrim(uv.Team)) else 'HEM' end)
+									 when [Type] = 'portfolio' then (case when EmployerSize_Group <> 'HEM' 
 																			then (case when EmployerSize_Group = 'hotel' and uv.Portfolio in ('Accommodation','Pubs, Taverns and Bars') then 'hotel'
 																					   else rtrim(uv.Portfolio)
 																				  end
 																			     )
-																		  else 'Hospitality' 
+																		  else 'HEM' 
 																	 end)
-									 when [Type] = 'account_manager' then (case when EmployerSize_Group <> 'Hospitality' then rtrim(uv.Account_Manager) else 'Hospitality' end)
+									 when [Type] = 'account_manager' then (case when EmployerSize_Group <> 'HEM' then rtrim(uv.Account_Manager) else 'HEM' end)
 								end
 									 = EmployerSize_Group)
 GO

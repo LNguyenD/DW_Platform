@@ -17,10 +17,10 @@ AS
 			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','group',rtrim(isnull(sub.[Group],'Miscellaneous')),NULL,uv.Measure)									
 			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','group',rtrim(isnull(sub.[Group],'Miscellaneous')),NULL,uv.Measure)
 							
-	FROM      views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	FROM      views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
-			  and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
+			  and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.rtw_view)
 
 	GROUP BY  rtrim(isnull(sub.[Group],'Miscellaneous')), uv.Remuneration_Start, uv.Remuneration_End, uv.Measure
 
@@ -39,9 +39,9 @@ AS
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
 			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','agency',rtrim(isnull(sub.agency_name,'Miscellaneous')),NULL,uv.Measure)									
 			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','agency',rtrim(isnull(sub.agency_name,'Miscellaneous')),NULL,uv.Measure)					 
-	FROM         views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	FROM         views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
-				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
+				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.rtw_view)
 	GROUP BY  rtrim(isnull(sub.agency_name,'Miscellaneous')), uv.Remuneration_Start, uv.Remuneration_End, uv.Measure
 
 	--Agency Police & Fire & RFS--
@@ -60,9 +60,9 @@ AS
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
 			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','agency','POLICE & EMERGENCY SERVICES',NULL,uv.Measure)
 			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','agency','POLICE & EMERGENCY SERVICES',NULL,uv.Measure)
-	FROM         views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	FROM         views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
-				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
+				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and rtrim(isnull(sub.agency_name,'Miscellaneous')) in ('Police','Fire','RFS')
 	GROUP BY  uv.Remuneration_Start, uv.Remuneration_End, uv.Measure
 
@@ -82,9 +82,9 @@ AS
 			  ,AVGDURN = SUM(uv.LT) / nullif(SUM(uv.WGT),0)
 			  ,[Target] = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'target','agency','Health & Other',NULL,uv.Measure)									
 			  ,Base = udfs.tmf_rtw_gettargetandbase(uv.Remuneration_End,'base','agency','Health & Other',NULL,uv.Measure)					 
-	FROM         views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	FROM         views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 	WHERE	  DATEDIFF(MM, uv.Remuneration_Start, uv.Remuneration_End) =11 
-				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.RTW_view)
+				and uv.Remuneration_End between DATEADD(DAY, -1, DATEADD(M, -23 + DATEDIFF(M, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)), 0)) + '23:59' and (SELECT max(Remuneration_End) FROM  views.rtw_view)
 				and rtrim(isnull(sub.agency_name,'Miscellaneous')) in ('Health','Other')
 	GROUP BY  uv.Remuneration_Start, uv.Remuneration_End, uv.Measure
 
@@ -102,10 +102,10 @@ AS
 				,[Target] = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End,'target','group','TMF',NULL,t.Measure)
 				,Base = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End,'base','group','TMF',NULL,t.Measure)
 
-	FROM         views.RTW_view t 
-	inner join (SELECT     dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)) - 23, 0))) + '23:59' AS Remuneration_End
+	FROM         views.rtw_view t 
+	inner join (SELECT     dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)) - 23, 0))) + '23:59' AS Remuneration_End
 						   FROM          master.dbo.spt_values
-						   WHERE      'P' = type AND dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)) - 23, 0))) + '23:59' <= (SELECT max(Remuneration_End) FROM  views.RTW_view)) u on t.Remuneration_End = u.Remuneration_End
+						   WHERE      'P' = type AND dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)) - 23, 0))) + '23:59' <= (SELECT max(Remuneration_End) FROM  views.rtw_view)) u on t.Remuneration_End = u.Remuneration_End
 	AND     DATEDIFF(MM, t .remuneration_start, t .remuneration_end) = 11
 	GROUP BY  t .Measure, t .remuneration_start, t .remuneration_end
 
@@ -124,9 +124,9 @@ AS
 				,[Target] = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End, 'target','agency','TMF',NULL,t.Measure)
 				,Base = udfs.tmf_rtw_gettargetandbase(t.Remuneration_End,'base','agency','TMF',NULL,t.Measure)
 
-	FROM         views.RTW_view t inner join (SELECT     dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)) - 23, 0))) + '23:59' AS Remuneration_End
+	FROM         views.rtw_view t inner join (SELECT     dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)) - 23, 0))) + '23:59' AS Remuneration_End
 						   FROM          master.dbo.spt_values
-						   WHERE      'P' = type AND dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.RTW_view)) - 23, 0))) + '23:59' <= (SELECT max(Remuneration_End) FROM  views.RTW_view)) u on t.Remuneration_End = u.Remuneration_End
+						   WHERE      'P' = type AND dateadd(dd, - 1, DateAdd(m, number, DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT max(Remuneration_End) FROM  views.rtw_view)) - 23, 0))) + '23:59' <= (SELECT max(Remuneration_End) FROM  views.rtw_view)) u on t.Remuneration_End = u.Remuneration_End
 	AND     DATEDIFF(MM, t .remuneration_start, t .remuneration_end) = 11
 	GROUP BY  t .Measure, t .remuneration_start, t .remuneration_end
 GO

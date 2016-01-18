@@ -10,14 +10,14 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view
+		 			   FROM views.rtw_view
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
 							)
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view
+						FROM views.rtw_view
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -53,14 +53,14 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+		 			   FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
 							AND RTRIM(tmp.agencyname) = rtrim(isnull(sub.agency_name,'Miscellaneous')))
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+						FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -78,7 +78,7 @@ AS
 			<= cast(year(getdate()) as  varchar(10)) + '-12-31 ' + '23:59') as t1
 	CROSS JOIN
 
-	(select distinct rtrim(isnull(sub.agency_name,'Miscellaneous')) as agencyname from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
+	(select distinct rtrim(isnull(sub.agency_name,'Miscellaneous')) as agencyname from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
 
 	CROSS JOIN
 
@@ -96,14 +96,14 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+		 			   FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
 							and rtrim(isnull(sub.agency_name,'Miscellaneous')) in ('Police','Fire','RFS'))
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+						FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -139,14 +139,14 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+		 			   FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
 							and rtrim(isnull(sub.agency_name,'Miscellaneous')) in ('Health','Other'))
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+						FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -182,14 +182,14 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+		 			   FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
 							AND RTRIM(tmp.[group]) = rtrim(isnull(sub.[Group],'Miscellaneous')))
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+						FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -207,7 +207,7 @@ AS
 			<= cast(year(getdate()) as  varchar(10)) + '-12-31 ' + '23:59') as t1
 	CROSS JOIN
 
-	(select distinct rtrim(isnull(sub.[Group],'Miscellaneous')) as [group] from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
+	(select distinct rtrim(isnull(sub.[Group],'Miscellaneous')) as [group] from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
 
 	CROSS JOIN
 
@@ -225,7 +225,7 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+		 			   FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -233,7 +233,7 @@ AS
 							AND RTRIM(tmp.[Team]) =RTRIM([Team]))
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+						FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -252,7 +252,7 @@ AS
 			<= cast(year(getdate()) as  varchar(10)) + '-12-31 ' + '23:59') as t1
 	CROSS JOIN
 
-	(select distinct rtrim(isnull(sub.[Group],'Miscellaneous')) as [group],[Team] from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
+	(select distinct rtrim(isnull(sub.[Group],'Miscellaneous')) as [group],[Team] from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
 
 	CROSS JOIN
 
@@ -270,7 +270,7 @@ AS
 		   ,[Measure]= tmp.measure 	   
 		   ,[Target] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 		 					 * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))
-		 			   FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+		 			   FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -278,7 +278,7 @@ AS
 							AND RTRIM(tmp.sub_category) = rtrim(isnull(sub.Sub_Category,'Miscellaneous')))
 		   ,[Base] = (select ISNULL(SUM(LT) / nullif(SUM(WGT),0),0) 
 					   * POWER(CAST(0.9 as float), (CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,tmp.Remuneration))) as float)/18))*1.15
-						FROM views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+						FROM views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
 					   WHERE Measure=tmp.Measure								 
 							AND Remuneration_End = cast(year(DATEADD(mm,-3,tmp.Remuneration)) -1 as varchar(10)) +'/09/30 23:59:00.000'
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) =11 and [System] = 'TMF'
@@ -297,7 +297,7 @@ AS
 			<= cast(year(getdate()) as  varchar(10)) + '-12-31 ' + '23:59') as t1
 	CROSS JOIN
 
-	(select distinct rtrim(isnull(sub.agency_name,'Miscellaneous')) as agencyname, rtrim(isnull(sub.Sub_Category,'Miscellaneous')) as sub_category from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
+	(select distinct rtrim(isnull(sub.agency_name,'Miscellaneous')) as agencyname, rtrim(isnull(sub.Sub_Category,'Miscellaneous')) as sub_category from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number and uv.[System] = 'TMF') as t2
 
 	CROSS JOIN
 

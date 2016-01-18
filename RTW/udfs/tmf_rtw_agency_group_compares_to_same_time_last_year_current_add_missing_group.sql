@@ -35,8 +35,8 @@ RETURN
 		   ,WGT = 0
 		   ,AVGDURN = 0
 		   ,[Target] = 0
-	from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 	   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 	   
 	union 
@@ -46,8 +46,8 @@ RETURN
 		   ,WGT = 0
 		   ,AVGDURN = 0
 		   ,[Target] = 0
-	from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 	   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11) 
 	   and rtrim(isnull(sub.agency_name,'Miscellaneous')) in ('Police','Fire','RFS')
 	   
@@ -58,8 +58,8 @@ RETURN
 		   ,WGT = 0
 		   ,AVGDURN = 0
 		   ,[Target] = 0
-	from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 	   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)  
 	   and rtrim(isnull(sub.agency_name,'Miscellaneous')) in ('Health','Other')   
 	   
@@ -70,8 +70,8 @@ RETURN
 		   ,WGT = 0
 		   ,AVGDURN = 0
 		   ,[Target] = 0
-	from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number 
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number 
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 	   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)     
 	
 	union   
@@ -81,8 +81,8 @@ RETURN
 		   ,WGT = 0
 		   ,AVGDURN = 0
 		   ,[Target] = 0
-	from views.RTW_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number 
-	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.RTW_view)
+	from views.rtw_view uv left join ref.pol_agency_sub_category_mapping_reference sub on uv.POLICY_NO = sub.policy_number 
+	where  uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 	   and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)    
 	) as tmp3
 )

@@ -7,7 +7,16 @@ AS
 	'2014-12-01' [Remuneration_Start],
 	'2014-12-31 23:59' [Remuneration_End],
 	3 [Measure_months],
+	COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
+	COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
 	COALESCE(std.team,'Miscellaneous') [Team],
+	case when cdr.source_system_code = 'EMI'
+			then udfs.emi_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+		when cdr.source_system_code = 'TMF'
+			then udfs.tmf_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+		when cdr.source_system_code = 'HEM'
+			then udfs.hem_getgroup_byteam_udf(COALESCE(std.team,'Miscellaneous'))
+	end [Group],
 	'SARA HORNBY-HOWELL' [Case_manager],
 	cdr.claim_number [Claim_no],
 	cd.date_of_injury [DTE_OF_INJURY],
@@ -58,4 +67,8 @@ AS
 			ON mc.creation_date_key = cd_date.date_key
 		LEFT JOIN dim.clm_work_fitness_dimension wf
 			ON mc.work_fitness_key = wf.work_fitness_key
+			
+		/* Agency, Sub category mapping */
+		LEFT JOIN ref.pol_agency_sub_category_mapping_reference asm
+			ON asm.policy_number = cd.policy_number
 GO
