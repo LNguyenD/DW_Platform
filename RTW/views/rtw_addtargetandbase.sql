@@ -6,20 +6,27 @@ AS
 	WITH
 	values_by_type AS
 	(
-		select distinct rtrim(Agency_Name) as Value, [Type] = 'agency', [System]
+		select distinct Agency_Name as Value, [Type] = 'agency', [System]
 		from views.rtw_view
 		union all
-		select distinct rtrim([Group]) as Value, [Type] = 'group', [System]
+		select distinct [Group] as Value, [Type] = 'group', [System]
 		from views.rtw_view
 		union all
-		select distinct rtrim(Portfolio) as Value, [Type] = 'portfolio', [System]
+		select distinct Portfolio as Value, [Type] = 'portfolio', [System]
 		from views.rtw_view
 		union all
-		select distinct rtrim(EMPL_SIZE) as Value, [Type] = 'employer_size', [System]
+		select distinct EMPL_SIZE as Value, [Type] = 'employer_size', [System]
 		from views.rtw_view
 		union all
-		select distinct rtrim(Account_Manager) as Value, [Type] = 'account_manager', [System]
+		select distinct Account_Manager as Value, [Type] = 'account_manager', [System]
 		from views.rtw_view
+		union all
+		select distinct [System] as Value, [Type] = '', [System]
+		from views.rtw_view
+		union all
+		select distinct [Grouping] as Value, [Type] = 'grouping', [System]
+		from views.rtw_view
+		where [Grouping] <> ''
 	),
 	measure_types AS
 	(
@@ -49,15 +56,18 @@ AS
 								AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11 
 								AND rtw.[System] = val.[System]
 								AND val.Value = case when val.[Type] = 'agency'
-														then rtrim(rtw.Agency_Name)
+														then rtw.Agency_Name
 													when val.[Type] = 'group'
-														then rtrim(rtw.[Group])
+														then rtw.[Group]
 													when val.[Type] = 'portfolio'
-														then rtrim(rtw.Portfolio)
+														then rtw.Portfolio
 													when val.[Type] = 'employer_size'
-														then rtrim(rtw.EMPL_SIZE)
+														then rtw.EMPL_SIZE
 													when val.[Type] = 'account_manager'
-														then rtrim(rtw.Account_Manager)
+														then rtw.Account_Manager
+													when val.[Type] = 'grouping'
+														then rtw.[Grouping]
+													else rtw.[System]
 												end),
 			[Base] = (select ISNULL(SUM(LT) / NULLIF(SUM(WGT),0),0)
 								* POWER(CAST(0.9 as float),
@@ -68,15 +78,18 @@ AS
 							AND DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11
 							AND rtw.[System] = val.[System]
 							AND val.Value = case when val.[Type] = 'agency'
-														then rtrim(rtw.Agency_Name)
+														then rtw.Agency_Name
 													when val.[Type] = 'group'
-														then rtrim(rtw.[Group])
+														then rtw.[Group]
 													when val.[Type] = 'portfolio'
-														then rtrim(rtw.Portfolio)
+														then rtw.Portfolio
 													when val.[Type] = 'employer_size'
-														then rtrim(rtw.EMPL_SIZE)
+														then rtw.EMPL_SIZE
 													when val.[Type] = 'account_manager'
-														then rtrim(rtw.Account_Manager)
+														then rtw.Account_Manager
+													when val.[Type] = 'grouping'
+														then rtw.[Grouping]
+													else rtw.[System]
 												end),
 			Remuneration
 	from values_by_type val
