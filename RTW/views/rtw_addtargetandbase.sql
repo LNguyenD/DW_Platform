@@ -21,12 +21,12 @@ AS
 		select distinct Account_Manager as Value, [Type] = 'account_manager', [System]
 		from views.rtw_view
 		union all
-		select distinct [System] as Value, [Type] = '', [System]
-		from views.rtw_view
-		union all
 		select distinct [Grouping] as Value, [Type] = 'grouping', [System]
 		from views.rtw_view
 		where [Grouping] <> ''
+		union all
+		select distinct [System] as Value, [Type] = '', [System]
+		from views.rtw_view
 	),
 	measure_types AS
 	(
