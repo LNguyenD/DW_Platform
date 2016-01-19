@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>dw_dev</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@Type">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@System">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:UserDefined>true</rd:UserDefined>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText>SELECT Month_period, Type, System, Measure_months, Value, LT, WGT, AVGDURN, Target
+FROM     views.rtw_compares_to_same_time_last_year_current
+WHERE  (Month_period = 12) AND (System = @System) AND (Type like @Type + '%' OR (Type = 'total'))</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="Month_period">
+        <DataField>Month_period</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="Type">
+        <DataField>Type</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="System">
+        <DataField>System</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Measure_months">
+        <DataField>Measure_months</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="Value">
+        <DataField>Value</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="LT">
+        <DataField>LT</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+      <Field Name="WGT">
+        <DataField>WGT</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+      <Field Name="AVGDURN">
+        <DataField>AVGDURN</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+      <Field Name="Target">
+        <DataField>Target</DataField>
+        <rd:TypeName>System.Double</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
