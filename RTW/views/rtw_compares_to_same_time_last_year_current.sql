@@ -51,7 +51,7 @@ AS
 					and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)		
 					
 				union
-				select distinct [Group] as Value, [Type]='portfolio', [System]
+				select distinct [Group] as Value, [Type]='group', [System]
 				from views.rtw_view uv 
 				where uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 					and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)				   				
@@ -70,41 +70,42 @@ AS
 				where uv.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
 					and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
 				
-			) as temp_value
-	)
+			) as temp_value )
 			
-	select  Month_period=case when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 0
-					then 1
-				 when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 2
-					then 3
-				 when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 5
-					then 6
-				 when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11
-					then 12
-			end,
-			[Type], rtw.[System], Measure_months = Measure, Value,					
-			SUM(LT) as LT,
-			SUM(WGT) as WGT,
-			AVGDURN = SUM(LT) / NULLIF(SUM(WGT),0)		
-		    ,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.rtw_get_target_base(rtw.[System], Remuneration_End, 'target', [Type], Value, NULL, Measure),0)
-		    
-	from    views.rtw_view rtw
-			inner join values_by_type val
-				on val.Value = case when val.[Type] = 'agency'
-										then rtw.Agency_Name
-									when val.[Type] = 'group'
-										then rtw.[Group]
-									when val.[Type] = 'portfolio'
-										then rtw.Portfolio
-									when val.[Type] = 'employer_size'
-										then rtw.EMPL_SIZE
-									when val.[Type] = 'account_manager'
-										then rtw.Account_Manager
-									when val.[Type] = 'grouping'
-										then rtw.[Grouping]
-									else rtw.[System]
-								end AND val.[System] = rtw.[System]
-	where	rtw.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
-			and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
-	group by [Type], rtw.[System], Measure, Value, Remuneration_Start, Remuneration_End
+			
+			
+			select  Month_period=case when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 0
+							then 1
+						 when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 2
+							then 3
+						 when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 5
+							then 6
+						 when DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11
+							then 12
+					end,
+					[Type], rtw.[System], Measure_months = Measure, Value,					
+					SUM(LT) as LT,
+					SUM(WGT) as WGT,
+					AVGDURN = SUM(LT) / NULLIF(SUM(WGT),0)		
+				    ,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.rtw_get_target_base(rtw.[System], Remuneration_End, 'target', [Type], Value, NULL, Measure),0)
+				    
+			from    views.rtw_view rtw
+					inner join values_by_type val
+						on val.Value = case when val.[Type] = 'agency'
+												then rtw.Agency_Name
+											when val.[Type] = 'group'
+												then rtw.[Group]
+											when val.[Type] = 'portfolio'
+												then rtw.Portfolio
+											when val.[Type] = 'employer_size'
+												then rtw.EMPL_SIZE
+											when val.[Type] = 'account_manager'
+												then rtw.Account_Manager
+											when val.[Type] = 'grouping'
+												then rtw.[Grouping]
+											else rtw.[System]
+										end AND val.[System] = rtw.[System]
+			where	rtw.Remuneration_End = (SELECT max(Remuneration_End) FROM  views.rtw_view)
+					and  DATEDIFF(MM, Remuneration_Start, Remuneration_End) in (0,2,5,11)
+			group by [Type], rtw.[System], Measure, Value, Remuneration_Start, Remuneration_End
 GO
