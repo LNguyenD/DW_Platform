@@ -6,26 +6,26 @@ AS
 	WITH
 	values_by_type AS
 	(
-		select distinct Agency_Name as Value, [Type] = 'agency', [System]
+		select distinct Agency_Name as Value, '' as Sub_Value, [Type] = 'agency', [System]
 		from views.rtw_view
 		union all
-		select distinct [Group] as Value, [Type] = 'group', [System]
+		select distinct [Group] as Value, '' as Sub_Value, [Type] = 'group', [System]
 		from views.rtw_view
 		union all
-		select distinct Portfolio as Value, [Type] = 'portfolio', [System]
+		select distinct Portfolio as Value, '' as Sub_Value, [Type] = 'portfolio', [System]
 		from views.rtw_view
 		union all
-		select distinct EMPL_SIZE as Value, [Type] = 'employer_size', [System]
+		select distinct EMPL_SIZE as Value, '' as Sub_Value, [Type] = 'employer_size', [System]
 		from views.rtw_view
 		union all
-		select distinct Account_Manager as Value, [Type] = 'account_manager', [System]
+		select distinct Account_Manager as Value, '' as Sub_Value, [Type] = 'account_manager', [System]
 		from views.rtw_view
 		union all
-		select distinct [Grouping] as Value, [Type] = 'grouping', [System]
+		select distinct [Grouping] as Value, '' as Sub_Value, [Type] = 'grouping', [System]
 		from views.rtw_view
 		where [Grouping] <> ''
 		union all
-		select distinct [System] as Value, [Type] = '', [System]
+		select distinct [System] as Value, '' as Sub_Value, [Type] = '', [System]
 		from views.rtw_view
 	),
 	measure_types AS
@@ -46,7 +46,7 @@ AS
 								<= cast(year(getdate()) as  varchar(10)) + '-12-31 ' + '23:59') as tmp
 	)
 	
-	select	[Type], [System], Measure, Value,
+	select	[Type], [System], Measure, Value, Sub_Value,
 			[Target] = (select ISNULL(SUM(LT) / NULLIF(SUM(WGT),0),0)
 		 						* POWER(CAST(0.9 as float),
 		 							(CAST((DATEDIFF(mm,cast(year(DATEADD(mm,-3,rem.Remuneration)) -1 as varchar(10)) +'/06/30',DATEADD(mm,-3,rem.Remuneration))) as float)/18))
