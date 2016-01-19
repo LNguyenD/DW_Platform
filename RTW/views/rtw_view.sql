@@ -18,7 +18,7 @@ AS
 		[Agency_Grouping] = case when COALESCE(asm.agency_name,'Miscellaneous') in ('Health', 'Other')
 									then 'Health & Other'
 								when COALESCE(asm.agency_name,'Miscellaneous') in ('Police', 'Fire', 'RFS')
-									then 'Police & Fire & RFS'
+									then 'Police & Emergency Services'
 								else ''
 							end,
 		[Portfolio_Grouping] = case when 'Accommodation' in ('Accommodation', 'Pubs, Taverns and Bars')

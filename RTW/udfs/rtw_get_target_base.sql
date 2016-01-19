@@ -1,8 +1,8 @@
 IF OBJECT_ID('udfs.rtw_get_target_base') IS NOT NULL
 	DROP FUNCTION udfs.rtw_get_target_base
 GO
-CREATE FUNCTION udfs.rtw_get_target_base(@system varchar(20), @rem_end datetime, @item varchar(20), @type varchar(20),
-	@value varchar(20), @sub_value varchar(20), @measure int)
+CREATE FUNCTION udfs.rtw_get_target_base(@system varchar(20), @rem_end datetime, @item varchar(20), @type varchar(30),
+	@value varchar(50), @sub_value varchar(50), @measure int)
 	returns FLOAT
 AS
 BEGIN
