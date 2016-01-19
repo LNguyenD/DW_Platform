@@ -38,8 +38,8 @@ AS
 			LT = SUM(LT),
 			WGT = SUM(WGT),
 			AVGDURN = SUM(LT) / NULLIF(SUM(WGT),0),
-			[Target] = udfs.rtw_gettargetandbase(rtw.[System], Remuneration_End, 'target', [Type], Value, NULL, Measure),
-			Base = udfs.rtw_gettargetandbase(rtw.[System], Remuneration_End, 'base', [Type], Value, NULL, Measure)
+			[Target] = udfs.rtw_get_target_base(rtw.[System], Remuneration_End, 'target', [Type], Value, NULL, Measure),
+			Base = udfs.rtw_get_target_base(rtw.[System], Remuneration_End, 'base', [Type], Value, NULL, Measure)
 	from    views.rtw_view rtw
 			inner join values_by_type val
 				on val.Value = case when val.[Type] = 'agency'

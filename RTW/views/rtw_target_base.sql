@@ -1,7 +1,7 @@
-IF OBJECT_ID('views.rtw_addtargetandbase') IS NOT NULL
-	DROP VIEW views.rtw_addtargetandbase
+IF OBJECT_ID('views.rtw_target_base') IS NOT NULL
+	DROP VIEW views.rtw_target_base
 GO
-CREATE VIEW views.rtw_addtargetandbase
+CREATE VIEW views.rtw_target_base
 AS
 	WITH
 	values_by_type AS

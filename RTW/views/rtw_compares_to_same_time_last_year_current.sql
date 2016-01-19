@@ -1,14 +1,7 @@
-USE [dw_dev]
+IF OBJECT_ID('views.rtw_compares_to_same_time_last_year_current') IS NOT NULL
+	DROP VIEW views.rtw_compares_to_same_time_last_year_current
 GO
-
-/****** Object:  View [views].[rtw_agency_group_compares_to_same_time_last_year_current]    Script Date: 01/19/2016 13:00:41 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE VIEW [views].[rtw_compares_to_same_time_last_year_current]
+CREATE VIEW views.rtw_compares_to_same_time_last_year_current
 AS	
 	WITH values_by_type AS 
 	(
@@ -94,7 +87,7 @@ AS
 					SUM(LT) as LT,
 					SUM(WGT) as WGT,
 					AVGDURN = SUM(LT) / NULLIF(SUM(WGT),0)		
-				    ,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.rtw_gettargetandbase(rtw.[System], Remuneration_End, 'target', [Type], Value, NULL, Measure),0)
+				    ,[Target] = sum(LT)/nullif(sum(WGT),0)*100/nullif(udfs.rtw_get_target_base(rtw.[System], Remuneration_End, 'target', [Type], Value, NULL, Measure),0)
 				    
 			from    views.rtw_view rtw
 					inner join values_by_type val

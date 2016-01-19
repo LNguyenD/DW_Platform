@@ -1,7 +1,7 @@
-IF OBJECT_ID('udfs.rtw_gettargetandbase') IS NOT NULL
-	DROP FUNCTION udfs.rtw_gettargetandbase
+IF OBJECT_ID('udfs.rtw_get_target_base') IS NOT NULL
+	DROP FUNCTION udfs.rtw_get_target_base
 GO
-CREATE FUNCTION udfs.rtw_gettargetandbase(@system varchar(20), @rem_end datetime, @item varchar(20), @type varchar(20),
+CREATE FUNCTION udfs.rtw_get_target_base(@system varchar(20), @rem_end datetime, @item varchar(20), @type varchar(20),
 	@value varchar(20), @sub_value varchar(20), @measure int)
 	returns FLOAT
 AS
@@ -9,7 +9,7 @@ BEGIN
 	DECLARE @target float, @base float, @count int
 	
 	SELECT	@target = MIN(COALESCE(tb.[Target], 0)), @base = MIN(COALESCE(tb.[base], 0)), @count = COUNT(*)
-	FROM	views.rtw_addtargetandbase tb
+	FROM	views.rtw_target_base tb
 	WHERE	(([Type] = @type AND [Value] = @value)
 			OR ([Value] = @value AND UPPER(@value) = UPPER(@system)))
 			AND COALESCE([Sub_Value], '') = COALESCE(@sub_value, '')
@@ -22,7 +22,7 @@ BEGIN
 	IF @COUNT = 0 OR @target = 0 OR @base = 0
 	BEGIN		
 		SELECT	@target = MIN(tb.[Target]), @base = MIN(tb.[base])
-		FROM	views.rtw_addtargetandbase tb
+		FROM	views.rtw_target_base tb
 		WHERE	[Value] = UPPER(@system)
 				AND [Measure] = @measure
 				AND Remuneration= (CAST(YEAR(@rem_end) AS varchar)

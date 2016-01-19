@@ -8,10 +8,9 @@ SET NOCOUNT ON
 :r $(path)\staging\system.sql
 
 :r $(path)\views\rtw_view.sql
-:r $(path)\views\rtw_addtargetandbase.sql
+:r $(path)\views\rtw_target_base.sql
 
-:r $(path)\udfs\rtw_gettargetandbase.sql
-:r $(path)\udfs\tmf_rtw_agency_group_compares_to_same_time_last_year_current_add_missing_group.sql
+:r $(path)\udfs\rtw_get_target_base.sql
 
 :r $(path)\views\rtw_compares_to_same_time_last_year_current.sql
 :r $(path)\views\rtw_rolling_month_12.sql
