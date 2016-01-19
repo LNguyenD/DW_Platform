@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE VIEW [views].[rtw_agency_group_compares_to_same_time_last_year_current]
+CREATE VIEW [views].[rtw_compares_to_same_time_last_year_current]
 AS	
 	WITH values_by_type AS 
 	(
