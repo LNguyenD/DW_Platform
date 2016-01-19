@@ -14,15 +14,17 @@ AS
 		COALESCE(std.team,'Miscellaneous') [Team],
 		'C - Medium' [EMPL_SIZE],
 		'Lauren Christiansen' [Account_Manager],
-		'Other' [Portfolio],
-		[Grouping] = case when COALESCE(asm.agency_name,'Miscellaneous') in ('Health', 'Other')
-							then 'Health & Other'
-						when COALESCE(asm.agency_name,'Miscellaneous') in ('Police', 'Fire', 'RFS')
-							then 'Police & Fire & RFS'
-						when 'Other' in ('Accommodation', 'Pubs, Taverns and Bars')
-							then 'Hotel'
-						else ''
-					end,
+		'Accommodation' [Portfolio],
+		[Agency_Grouping] = case when COALESCE(asm.agency_name,'Miscellaneous') in ('Health', 'Other')
+									then 'Health & Other'
+								when COALESCE(asm.agency_name,'Miscellaneous') in ('Police', 'Fire', 'RFS')
+									then 'Police & Fire & RFS'
+								else ''
+							end,
+		[Portfolio_Grouping] = case when 'Accommodation' in ('Accommodation', 'Pubs, Taverns and Bars')
+										then 'Hotel'
+									else ''
+								end,
 		cdr.claim_number [Claim_no],
 		cd.date_of_injury [DTE_OF_INJURY],
 		cd.policy_number [POLICY_NO],

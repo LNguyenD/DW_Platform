@@ -21,11 +21,15 @@ AS
 		select distinct Account_Manager as Value, '' as Sub_Value, [Type] = 'account_manager', [System]
 		from views.rtw_view
 		union all
-		select distinct [Grouping] as Value, '' as Sub_Value, [Type] = 'grouping', [System]
+		select distinct Agency_Grouping as Value, '' as Sub_Value, [Type] = 'agency_grouping', [System]
 		from views.rtw_view
-		where [Grouping] <> ''
+		where Agency_Grouping <> '' and UPPER([System]) = 'TMF'
 		union all
-		select distinct [System] as Value, '' as Sub_Value, [Type] = '', [System]
+		select distinct Portfolio_Grouping as Value, '' as Sub_Value, [Type] = 'portfolio_grouping', [System]
+		from views.rtw_view
+		where Portfolio_Grouping <> '' and UPPER([System]) = 'HEM'
+		union all
+		select distinct [System] as Value, '' as Sub_Value, [Type] = 'total', [System]
 		from views.rtw_view
 	),
 	measure_types AS
@@ -65,8 +69,10 @@ AS
 														then rtw.EMPL_SIZE
 													when val.[Type] = 'account_manager'
 														then rtw.Account_Manager
-													when val.[Type] = 'grouping'
-														then rtw.[Grouping]
+													when val.[Type] = 'agency_grouping'
+														then rtw.Agency_Grouping
+													when val.[Type] = 'portfolio_grouping'
+														then rtw.Portfolio_Grouping
 													else rtw.[System]
 												end),
 			[Base] = (select ISNULL(SUM(LT) / NULLIF(SUM(WGT),0),0)
@@ -87,8 +93,10 @@ AS
 														then rtw.EMPL_SIZE
 													when val.[Type] = 'account_manager'
 														then rtw.Account_Manager
-													when val.[Type] = 'grouping'
-														then rtw.[Grouping]
+													when val.[Type] = 'agency_grouping'
+														then rtw.Agency_Grouping
+													when val.[Type] = 'portfolio_grouping'
+														then rtw.Portfolio_Grouping
 													else rtw.[System]
 												end),
 			Remuneration = CAST(YEAR(rem.Remuneration) AS varchar) + 'M'

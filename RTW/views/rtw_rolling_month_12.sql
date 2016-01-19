@@ -21,11 +21,15 @@ AS
 		select distinct Account_Manager as Value, [Type] = 'account_manager', [System]
 		from views.rtw_view
 		union all
-		select distinct [Grouping] as Value, [Type] = 'grouping', [System]
+		select distinct [Agency_Grouping] as Value, [Type] = 'agency_grouping', [System]
 		from views.rtw_view
-		where [Grouping] <> ''
+		where [Agency_Grouping] <> '' and UPPER([System]) = 'TMF'
 		union all
-		select distinct [System] as Value, [Type] = '', [System]
+		select distinct [Portfolio_Grouping] as Value, [Type] = 'portfolio_grouping', [System]
+		from views.rtw_view
+		where [Portfolio_Grouping] <> '' and UPPER([System]) = 'HEM'
+		union all
+		select distinct [System] as Value, [Type] = 'total', [System]
 		from views.rtw_view
 	)
 
@@ -52,8 +56,10 @@ AS
 										then rtw.EMPL_SIZE
 									when val.[Type] = 'account_manager'
 										then rtw.Account_Manager
-									when val.[Type] = 'grouping'
-										then rtw.[Grouping]
+									when val.[Type] = 'agency_grouping'
+										then rtw.Agency_Grouping
+									when val.[Type] = 'portfolio_grouping'
+										then rtw.Portfolio_Grouping
 									else rtw.[System]
 								end AND val.[System] = rtw.[System]
 	where	DATEDIFF(MM, Remuneration_Start, Remuneration_End) = 11
