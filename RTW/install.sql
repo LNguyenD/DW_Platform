@@ -8,9 +8,7 @@ SET NOCOUNT ON
 :r $(path)\staging\system.sql
 
 :r $(path)\views\rtw_view.sql
-:r $(path)\views\emi_rtw_addtargetandbase.sql
-:r $(path)\views\tmf_rtw_addtargetandbase.sql
-:r $(path)\views\hem_rtw_addtargetandbase.sql
+:r $(path)\views\rtw_addtargetandbase.sql
 
 :r $(path)\udfs\emi_rtw_gettargetandbase.sql
 :r $(path)\udfs\tmf_rtw_gettargetandbase.sql
