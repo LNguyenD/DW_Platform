@@ -45,7 +45,7 @@ AS
 		rf.M_weeks [Measure], *
 	FROM
 	(	
-		SELECT TOP 3000
+		SELECT TOP 500
 			cdr.source_system_code [System],
 			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
 			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
@@ -113,6 +113,7 @@ AS
 			/* Agency, Sub category mapping */
 			LEFT JOIN ref.pol_agency_sub_category_mapping_reference asm
 				ON asm.policy_number = cd.policy_number
+		WHERE cd.date_of_injury > '2012-01-01'
 	) rtw
 	CROSS JOIN rems_fake rf
 GO
