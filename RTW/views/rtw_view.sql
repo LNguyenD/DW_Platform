@@ -45,11 +45,12 @@ AS
 		rf.M_weeks [Measure], *
 	FROM
 	(	
-		SELECT TOP 500
+		SELECT TOP 300
 			cdr.source_system_code [System],
 			COALESCE(asm.agency_name,'Miscellaneous') [Agency_Name],
 			COALESCE(asm.sub_category,'Miscellaneous') [Sub_Category],
-			udfs.getgroup_byteam_udf(cdr.source_system_code, COALESCE(std.team,'Miscellaneous')) [Group],
+			--udfs.getgroup_byteam_udf(cdr.source_system_code, COALESCE(std.team,'Miscellaneous')) [Group],
+			COALESCE(asm.[group],'Miscellaneous') [Group],
 			COALESCE(std.team,'Miscellaneous') [Team],
 			'C - Medium' [EMPL_SIZE],
 			'Lauren Christiansen' [Account_Manager],
