@@ -23,11 +23,11 @@ AS
 		union all
 		select distinct Agency_Grouping as Value, '' as Sub_Value, [Type] = 'agency_grouping', [System]
 		from views.rtw_view
-		where Agency_Grouping <> '' and UPPER([System]) = 'TMF'
+		where Agency_Grouping <> ''
 		union all
 		select distinct Portfolio_Grouping as Value, '' as Sub_Value, [Type] = 'portfolio_grouping', [System]
 		from views.rtw_view
-		where Portfolio_Grouping <> '' and UPPER([System]) = 'HEM'
+		where Portfolio_Grouping <> ''
 		union all
 		select distinct [System] as Value, '' as Sub_Value, [Type] = 'total', [System]
 		from views.rtw_view
