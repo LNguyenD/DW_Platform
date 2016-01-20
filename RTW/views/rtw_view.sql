@@ -18,7 +18,7 @@ AS
 		union all
 		select DATEADD(m, -1, End_Date)
 		from end_dates_fake 
-		where End_Date > DATEADD(m, -12, CONVERT(datetime, CONVERT(char, GETDATE(), 106)))
+		where End_Date > DATEADD(m, -36, CONVERT(datetime, CONVERT(char, GETDATE(), 106)))
 	),
 	measures_fake AS
 	(
